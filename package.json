@@ -1,0 +1,26 @@
+{
+  "name": "aquaflow-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AquaFlow - painel de gestão e monitoramento de reservatórios com autenticação.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "connect-sqlite3": "^0.9.16",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "express-session": "^1.18.1",
+    "google-auth-library": "^9.15.0",
+    "helmet": "^8.0.0",
+    "nodemailer": "^6.9.16",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}

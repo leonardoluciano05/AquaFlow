@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="AquaFlow — painel web responsivo para monitoramento e controle de reservatórios de água." name="description"/>
+<title>AquaFlow — Monitoramento</title>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body data-page="monitoramento">
+<!--
+    Sprite SVG local: mantém os ícones no próprio projeto e evita dependências externas.
+    Os símbolos são reutilizados com <use href="#icon-..."> ao longo da interface.
+  -->
+<svg aria-hidden="true" class="svg-sprite" focusable="false">
+<symbol id="icon-home" viewbox="0 0 24 24"><path d="M3 11.2 12 4l9 7.2v8.3a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H4.5A1.5 1.5 0 0 1 3 19.5z"></path></symbol>
+<symbol id="icon-chart" viewbox="0 0 24 24"><path d="M4 20V10h3v10zm6 0V4h3v16zm6 0v-7h3v7zM2 21h20v1H2z"></path></symbol>
+<symbol id="icon-gear" viewbox="0 0 24 24"><path d="M19.4 13a7.8 7.8 0 0 0 .1-1 7.8 7.8 0 0 0-.1-1l2.1-1.6-2-3.5-2.5 1a8 8 0 0 0-1.8-1L15 3h-4l-.4 2.9a8 8 0 0 0-1.8 1l-2.5-1-2 3.5L6.4 11a7.8 7.8 0 0 0-.1 1 7.8 7.8 0 0 0 .1 1l-2.1 1.6 2 3.5 2.5-1a8 8 0 0 0 1.8 1L11 21h4l.4-2.9a8 8 0 0 0 1.8-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8a3.5 3.5 0 0 1 0 7.5z"></path></symbol>
+<symbol id="icon-clock" viewbox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 5v5.2l4 2.3-1 1.8-5-2.9V7z"></path></symbol>
+<symbol id="icon-alert" viewbox="0 0 24 24"><path d="M12 3 1.8 20h20.4L12 3z" fill="currentColor"></path><path d="M12 8.1c.6 0 1 .4 1 1V14c0 .6-.4 1-1 1s-1-.4-1-1V9.1c0-.6.4-1 1-1zM12 17.2a1.35 1.35 0 1 0 0 2.7 1.35 1.35 0 0 0 0-2.7z" fill="#ffffff"></path></symbol>
+<symbol id="icon-bell" viewbox="0 0 24 24"><path d="M12 22a2.7 2.7 0 0 0 2.5-1.7h-5A2.7 2.7 0 0 0 12 22zm7-5-2-2.2V9a5 5 0 0 0-4-4.9V3h-2v1.1A5 5 0 0 0 7 9v5.8L5 17v1h14z"></path></symbol>
+<symbol id="icon-user" viewbox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm8 10a8 8 0 0 0-16 0z"></path></symbol>
+<symbol id="icon-menu" viewbox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></symbol>
+<symbol id="icon-wifi" viewbox="0 0 24 24"><path d="M12 18.5 9.5 16a3.6 3.6 0 0 1 5 0zm-6-6A8.5 8.5 0 0 1 18 12l-1.8 1.8a6 6 0 0 0-8.4 0zm-4-4a14 14 0 0 1 20 0l-1.8 1.8a11.5 11.5 0 0 0-16.4 0z"></path></symbol>
+<symbol id="icon-tank" viewbox="0 0 24 24"><path d="M4 6c0-2 3.6-3 8-3s8 1 8 3v12c0 2-3.6 3-8 3s-8-1-8-3zm2 0c.8.7 3 1.2 6 1.2S17.2 6.7 18 6c-.8-.7-3-1.2-6-1.2S6.8 5.3 6 6zm0 4v3c1.5.8 3.7 1.2 6 1.2s4.5-.4 6-1.2v-3c-1.6.7-3.8 1.1-6 1.1S7.6 10.7 6 10zm0 7.5c1.5.8 3.7 1.2 6 1.2s4.5-.4 6-1.2V15c-1.6.7-3.8 1.1-6 1.1S7.6 15.7 6 15z"></path></symbol>
+<symbol id="icon-pump" viewbox="0 0 24 24"><path d="M7 4h10v3h2v2h2v8h-3v3h-4v-3H7v3H3v-4H2v-6h5zm2 3v7h8V9h-2v2h-2V7zm1 2h3v3h-3z"></path></symbol>
+<symbol id="icon-wave" viewbox="0 0 24 24"><path d="M2 8c2.4 0 2.4-2 4.8-2s2.4 2 4.8 2 2.4-2 4.8-2 2.4 2 4.8 2v2c-2.4 0-2.4-2-4.8-2s-2.4 2-4.8 2-2.4-2-4.8-2S4.4 10 2 10zm0 6c2.4 0 2.4-2 4.8-2s2.4 2 4.8 2 2.4-2 4.8-2 2.4 2 4.8 2v2c-2.4 0-2.4-2-4.8-2s-2.4 2-4.8 2-2.4-2-4.8-2S4.4 16 2 16z"></path></symbol>
+<symbol id="icon-building" viewbox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13h2v1H2v-1zm4-9h3V9H8zm5 0h3V9h-3zM8 17h3v-3H8zm5 0h3v-3h-3z"></path></symbol>
+<symbol id="icon-check" viewbox="0 0 24 24"><path d="m9.5 17.5-5-5 1.7-1.7 3.3 3.3 8.3-8.3 1.7 1.7z"></path></symbol>
+<symbol id="icon-play" viewbox="0 0 24 24"><path d="m8 5 11 7-11 7z"></path></symbol>
+<symbol id="icon-stop" viewbox="0 0 24 24"><path d="M7 7h10v10H7z"></path></symbol>
+<symbol id="icon-search" viewbox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 1 0 4 11.6L20 21l1-1-5.4-5.4A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path></symbol>
+<symbol id="icon-info" viewbox="0 0 24 24"><path d="M11 10h2v8h-2zm0-4h2v2h-2zm1-4a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path></symbol>
+<symbol id="icon-chevron-down" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></symbol>
+</svg>
+<!-- Cabeçalho fixo em todas as telas: identidade visual, notificação e usuário. -->
+<header class="app-header">
+<div class="header__content">
+<button aria-expanded="false" aria-label="Abrir menu" class="icon-button mobile-only" id="menuToggle" type="button">
+<svg class="icon"><use href="#icon-menu"></use></svg>
+</button>
+<a aria-label="AquaFlow — Ir para início" class="brand" href="index.html">
+  <img src="assets/logo-aquaflow-official.png" alt="Logo AquaFlow" class="brand__logo"/>
+  <span class="brand__text">
+    <strong>Aqua<span>Flow</span></strong>
+    <small>Gestão Inteligente de Reservatórios</small>
+  </span>
+</a>
+<div class="header__actions">
+<div class="header-action header-action--notifications">
+<button aria-controls="notificationPanel" aria-expanded="false" aria-label="Notificações" class="icon-button notification-button" id="notificationToggle" type="button">
+<svg class="icon header-bell-icon"><use href="#icon-bell"></use></svg>
+<span class="notification-dot"></span>
+</button>
+<div class="header-popover notification-panel" hidden id="notificationPanel">
+<div class="header-popover__header">
+<div>
+<h3>Notificações</h3>
+<p>Atualizações do plano e do sistema</p>
+</div>
+<span class="header-popover__badge">3 novas</span>
+</div>
+<div class="notification-list">
+<article class="notification-item notification-item--warning">
+<span aria-hidden="true" class="notification-item__marker"></span>
+<div class="notification-item__content">
+<strong>Plano da empresa expira em 12 dias</strong>
+<p>Renove até <strong>30/11/2026</strong> para manter o monitoramento e o histórico ativos.</p>
+<small>Hoje, 10:24</small>
+</div>
+</article>
+<article class="notification-item notification-item--info">
+<span aria-hidden="true" class="notification-item__marker"></span>
+<div class="notification-item__content">
+<strong>Fatura do próximo ciclo disponível</strong>
+<p>O documento do plano Business já pode ser consultado no painel administrativo.</p>
+<small>Hoje, 09:50</small>
+</div>
+</article>
+<article class="notification-item notification-item--success">
+<span aria-hidden="true" class="notification-item__marker"></span>
+<div class="notification-item__content">
+<strong>Sensores operando normalmente</strong>
+<p>Última sincronização concluída sem falhas críticas nos reservatórios.</p>
+<small>Hoje, 09:32</small>
+</div>
+</article>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="header__divider"></div>
+<div class="header-action header-action--user">
+<button aria-controls="userPanel" aria-expanded="false" aria-label="Menu do usuário" class="user-menu" id="userMenuToggle" type="button">
+<span class="user-avatar"><svg class="icon"><use href="#icon-user"></use></svg></span>
+<span class="user-meta"><span class="user-name">Administrador</span><span class="user-subtitle">Plano Business</span></span>
+<span aria-hidden="true" class="user-caret"><svg class="icon"><use href="#icon-chevron-down"></use></svg></span>
+</button>
+<div class="header-popover user-panel" hidden id="userPanel">
+<div class="user-panel__top">
+<span class="user-avatar user-avatar--large"><svg class="icon"><use href="#icon-user"></use></svg></span>
+<div>
+<strong>Administrador</strong>
+<p>Conta principal da empresa</p>
+</div>
+</div>
+<div class="plan-card">
+<div class="plan-card__chip">Plano Business</div>
+<ul class="plan-card__list">
+<li><span>Empresa</span><strong>AquaFlow Monitoramento</strong></li>
+<li><span>Validade</span><strong>30/11/2026</strong></li>
+<li><span>Status</span><strong class="plan-card__status">Ativo</strong></li>
+</ul>
+</div>
+<div class="user-panel__footer">
+<button class="dropdown-link" data-action="logout" type="button">Sair</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Navegação principal. No mobile, este bloco vira um drawer controlado pelo JavaScript. -->
+<nav aria-label="Navegação principal" class="main-nav" id="mainNav">
+<div class="nav__content">
+<a class="nav-item" data-page="inicio" href="index.html">
+<span class="nav-item__icon"><img src="assets/nav-inicio-final.png" alt="" aria-hidden="true" class="nav-icon-image"/></span><span>Início</span>
+</a>
+<a class="nav-item is-active" data-page="monitoramento" href="monitoramento.html">
+<span class="nav-item__icon"><img src="assets/nav-monitoramento-final.png" alt="" aria-hidden="true" class="nav-icon-image"/></span><span>Monitoramento</span>
+</a>
+<a class="nav-item" data-page="controle" href="controle.html">
+<span class="nav-item__icon"><img src="assets/nav-controle-final.png" alt="" aria-hidden="true" class="nav-icon-image"/></span><span>Controle</span>
+</a>
+<a class="nav-item" data-page="historico" href="historico.html">
+<span class="nav-item__icon"><img src="assets/nav-historico-final.png" alt="" aria-hidden="true" class="nav-icon-image"/></span><span>Histórico</span>
+</a>
+<a class="nav-item" data-page="alertas" href="alertas.html">
+<span class="nav-item__icon"><img src="assets/nav-alertas-final.png" alt="" aria-hidden="true" class="nav-icon-image"/></span><span>Alertas</span>
+</a>
+</div>
+</nav>
+<main class="app-main">
+<!-- =========================================================
+         PÁGINA: INÍCIO / DASHBOARD
+         Baseada no dashboard principal do protótipo AquaFlow.
+         ========================================================= -->
+
+<!-- =========================================================
+         PÁGINA: MONITORAMENTO
+         ========================================================= -->
+<section aria-labelledby="monitorTitle" class="page is-active" data-page-content="monitoramento">
+<h1 class="sr-only" id="monitorTitle">Monitoramento</h1>
+<div class="summary-grid summary-grid--three">
+<article class="summary-card"><span class="summary-icon summary-icon--green"><img src="assets/icon-wifi-green.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><small>Sensores Online</small><strong class="text-green" data-sensors-online="">4 de 4</strong></div></article>
+<article class="summary-card"><span class="summary-icon monitor-update-clock" aria-hidden="true"><svg class="monitor-update-clock__svg" viewBox="0 0 24 24" role="img"><circle cx="12" cy="12" r="10"></circle><path d="M12 6.5v5.5l4.2 2.8"></path></svg></span><div><small>Atualização</small><strong class="text-blue" data-update-age="">Há 1 min</strong></div></article>
+<article class="summary-card"><span class="summary-icon summary-icon--orange"><img src="assets/icon-tank-reserve-orange.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><small>Reservatórios Monitorados</small><strong class="text-blue">2 de 2</strong></div></article>
+</div>
+<div class="monitor-grid">
+<article class="panel monitor-reservoirs">
+<div class="reservoir-grid">
+<section class="reservoir reservoir--compact" data-reservoir-card="principal">
+<div class="reservoir__heading"><span class="summary-icon summary-icon--blue small"><img src="assets/icon-tank-primary-blue.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><h2>Reservatório Principal</h2><p>Nível de água</p></div></div>
+<div class="water-gauge water-gauge--compact" data-water-gauge="principal" style="--level: 0"><div class="water-gauge__water"></div><strong data-reservoir-level="principal">78%</strong></div>
+<p class="reservoir__volume" data-reservoir-volume-line="principal"><strong data-reservoir-liters="principal">3.900</strong> de 5.000 L</p>
+<dl class="reservoir__details"><div><dt>Capacidade total</dt><dd data-reservoir-capacity="principal">5.000 L</dd></div><div><dt>Volume atual</dt><dd data-reservoir-current="principal">3.900 L</dd></div><div><dt>Status</dt><dd data-reservoir-status="principal"><span class="status-dot status-dot--ok"></span>Nível adequado</dd></div></dl>
+</section>
+<section class="reservoir reservoir--compact" data-reservoir-card="reserva">
+<div class="reservoir__heading"><span class="summary-icon summary-icon--orange small"><img src="assets/icon-tank-reserve-orange.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><h2>Reservatório Reserva</h2><p>Nível de água</p></div></div>
+<div class="water-gauge water-gauge--compact" data-water-gauge="reserva" style="--level: 0"><div class="water-gauge__water"></div><strong data-reservoir-level="reserva">100%</strong></div>
+<p class="reservoir__volume" data-reservoir-volume-line="reserva"><strong data-reservoir-liters="reserva">2.000</strong> de 2.000 L</p>
+<dl class="reservoir__details"><div><dt>Capacidade total</dt><dd data-reservoir-capacity="reserva">2.000 L</dd></div><div><dt>Volume atual</dt><dd data-reservoir-current="reserva">2.000 L</dd></div><div><dt>Status</dt><dd data-reservoir-status="reserva"><span class="status-dot status-dot--ok"></span>Reservatório cheio</dd></div></dl>
+</section>
+</div>
+</article>
+<div class="monitor-side">
+<article class="panel chart-panel live-history-panel">
+<div class="chart-panel__header">
+<div>
+<h2>Níveis dos reservatórios (tempo real)</h2>
+<p class="chart-panel__subtitle">Cada ponto representa uma leitura recebida do ESP32.</p>
+</div>
+<div class="chart-history-controls" aria-label="Navegação do histórico do gráfico">
+<button class="chart-nav-button" data-live-chart-prev type="button" aria-label="Ver leituras anteriores">←</button>
+<span class="chart-range-label" data-live-chart-range>Leituras mais recentes</span>
+<button class="chart-nav-button" data-live-chart-next type="button" aria-label="Ver leituras mais recentes">→</button>
+<button class="chart-live-button" data-live-chart-now type="button">Agora</button>
+</div>
+</div>
+
+<div class="chart-legend" aria-label="Legenda do gráfico">
+<span><i class="legend-dot legend-dot--blue"></i>Reservatório Principal</span>
+<span><i class="legend-dot legend-dot--orange"></i>Reservatório Reserva</span>
+</div>
+
+<div class="interactive-chart" data-live-chart>
+<div class="chart-y-labels" aria-hidden="true"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div>
+<svg aria-label="Histórico de níveis dos reservatórios" class="line-chart line-chart--interactive" role="img" viewbox="0 0 720 220" preserveAspectRatio="none">
+<g class="chart-grid">
+<path d="M46 20H704M46 65H704M46 110H704M46 155H704M46 200H704"></path>
+</g>
+<polyline class="chart-line chart-line--blue" data-live-series="principal" points=""></polyline>
+<polyline class="chart-line chart-line--orange" data-live-series="reserva" points=""></polyline>
+<g data-live-points="principal"></g>
+<g data-live-points="reserva"></g>
+<g data-live-axis-labels></g>
+</svg>
+<div class="chart-tooltip" data-live-chart-tooltip role="status" aria-live="polite" hidden></div>
+</div>
+
+<p class="chart-empty" data-live-chart-empty hidden>Aguardando as primeiras leituras do ESP32…</p>
+</article>
+<div class="monitor-lower">
+<article class="panel status-panel">
+<h2>Status do sistema</h2>
+<div class="status-list">
+<div class="status-row status-row--success"><span class="summary-icon small summary-icon--blue"><img src="assets/icon-wave-blue.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><small>Fonte de abastecimento</small><strong>Normal</strong><p>Fornecimento estável</p></div><span class="status-dot status-dot--ok"></span></div>
+<div class="status-row status-row--success"><span class="summary-icon small summary-icon--blue"><img src="assets/icon-building-green.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><small>Cidade</small><strong>Normal</strong><p>Sem intercorrências</p></div><span class="status-dot status-dot--ok"></span></div>
+<div class="status-row status-row--success"><span class="summary-icon small summary-icon--blue"><img src="assets/icon-esp32-gray.png" alt="" aria-hidden="true" class="summary-icon__image"/></span><div><small>Conectividade ESP32</small><strong>Online</strong><p>Dispositivos conectados</p></div><span class="status-dot status-dot--ok"></span></div>
+</div>
+<p class="info-note"><svg class="icon"><use href="#icon-info"></use></svg>Sistema operando normalmente.</p>
+</article>
+<article class="panel readings-panel">
+<h2>Últimas leituras dos sensores</h2>
+<ul class="reading-list">
+<li><strong>Reservatório Principal</strong><span data-reading="principal">78%</span><time data-reading-time="principal">10:24:12</time></li>
+<li><strong>Reservatório Reserva</strong><span data-reading="reserva">100%</span><time data-reading-time="reserva">10:24:08</time></li>
+<li><strong>Fonte / Captação</strong><span data-source-reading="">Normal</span><time data-reading-time="source">10:24:10</time></li>
+</ul>
+<button class="text-button" data-go="historico" type="button"><span class="text-button__label">Ver histórico completo de leituras</span><span class="text-button__arrow" aria-hidden="true">→</span></button>
+</article>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PÁGINA: CONTROLE
+         ========================================================= -->
+
+<!-- =========================================================
+         PÁGINA: HISTÓRICO
+         ========================================================= -->
+
+<!-- =========================================================
+         PÁGINA: ALERTAS
+         ========================================================= -->
+
+</main>
+<!-- Barra de estado comum a todas as páginas, inspirada no rodapé do protótipo. -->
+<footer class="status-footer">
+<span><svg class="icon"><use href="#icon-clock"></use></svg>Última atualização: <strong data-last-update="">10:24</strong></span>
+<span id="connectionState"><span class="status-dot status-dot--ok" id="connectionDot"></span><span class="connection-state__icon-wrap"><img src="assets/icon-esp32-gray.png" alt="" aria-hidden="true" class="connection-state__icon"/></span>ESP32 aguardando conexão</span>
+</footer>
+<!-- Toast discreto para feedback de ações sem interromper o fluxo do usuário. -->
+<div aria-live="polite" class="toast" id="toast" role="status"></div>
+<!-- Confirmação usada antes de comandos que afetam bombas/abastecimento. -->
+<dialog class="confirm-dialog" id="confirmDialog">
+<form method="dialog">
+<div class="dialog-icon"><svg class="icon"><use href="#icon-alert"></use></svg></div>
+<h2 id="confirmTitle">Confirmar ação</h2>
+<p id="confirmMessage">Deseja continuar?</p>
+<div class="dialog-actions">
+<button class="button button--secondary" value="cancel">Cancelar</button>
+<button class="button button--primary" id="confirmActionButton" value="confirm">Confirmar</button>
+</div>
+</form>
+</dialog>
+<script src="auth-client.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

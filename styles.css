@@ -1,0 +1,4685 @@
+/* ==============================================================
+   AquaFlow — Folha de estilos principal
+   --------------------------------------------------------------
+   Estrutura:
+   1. Tokens e reset
+   2. Cabeçalho / navegação
+   3. Componentes reutilizáveis
+   4. Layouts por página
+   5. Responsividade
+   ============================================================== */
+
+:root {
+  /* Paleta aproximada do protótipo Figma. */
+  --green-600: #85b51f;
+  --green-700: #72a016;
+  --green-100: #e8f7ee;
+  --blue-600: #2f86ee;
+  --blue-700: #1b64bd;
+  --blue-100: #eaf4ff;
+  --orange-500: #ff7a1a;
+  --orange-100: #fff0df;
+  --purple-600: #7d4ed8;
+  --purple-100: #f0e9ff;
+  --red-600: #ef3f4b;
+  --red-100: #ffe5e8;
+  --cyan-500: #2ba9ee;
+  --text-900: #163b68;
+  --text-700: #31567f;
+  --text-500: #7690aa;
+  --border: #dfe9f2;
+  --surface: #ffffff;
+  --background: #f4f8fc;
+  --shadow: 0 6px 18px rgba(27, 78, 128, 0.08);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 7px;
+  --content-width: 1440px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-900);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+svg { display: block; }
+
+.svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon { width: 1.2em; height: 1.2em; fill: currentColor; flex: 0 0 auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.mobile-only { display: none !important; }
+
+/* ------------------------------
+   Cabeçalho e marca
+   ------------------------------ */
+.app-header { background: var(--surface); border-bottom: 1px solid #edf2f7; }
+.header__content, .nav__content, .app-main, .status-footer {
+  width: min(100% - 32px, var(--content-width));
+  margin-inline: auto;
+}
+.header__content { min-height: 118px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 14px; color: inherit; text-decoration: none; }
+.brand__logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.brand__text { display: grid; }
+.brand__text strong { font-size: clamp(24px, 3vw, 34px); letter-spacing: -1.4px; color: #1c4f8d; }
+.brand__text strong span { color: var(--green-600); }
+.brand__text small { color: var(--text-500); font-size: 13px; margin-top: -2px; }
+
+.header__actions { display: flex; align-items: center; gap: 22px; }
+.header__divider { width: 1px; height: 74px; background: var(--border); }
+.icon-button { width: 46px; height: 46px; border: 0; background: transparent; color: var(--green-600); display: grid; place-items: center; border-radius: 50%; position: relative; }
+.icon-button:hover { background: #f0f6e8; }
+.notification-button .icon { width: 26px; height: 26px; }
+.notification-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--red-600); top: 7px; right: 8px; border: 2px solid var(--surface); }
+.user-menu { display: flex; align-items: center; gap: 12px; border: 0; background: transparent; color: var(--green-600); font-weight: 700; }
+.user-avatar { width: 48px; height: 48px; border: 3px solid var(--green-600); border-radius: 50%; display: grid; place-items: center; }
+.user-avatar .icon { width: 30px; height: 30px; }
+.user-name { font-size: 18px; }
+.user-caret { margin-left: 4px; font-size: 20px; }
+
+/* ------------------------------
+   Navegação principal
+   ------------------------------ */
+.main-nav { background: var(--green-600); color: white; position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(40,80,10,.08); }
+.nav__content { min-height: 82px; display: flex; align-items: center; gap: 24px; }
+.nav-item { border: 0; color: white; background: transparent; min-height: 58px; padding: 0 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 16px; transition: background .2s ease, transform .2s ease; }
+.nav-item:hover { background: rgba(255,255,255,.12); }
+.nav-item.is-active { background: #4a91df; box-shadow: 0 5px 12px rgba(27,83,142,.16); }
+.nav-item .icon { width: 26px; height: 26px; }
+
+/* ------------------------------
+   Estrutura principal e componentes comuns
+   ------------------------------ */
+.app-main { padding: 22px 0 16px; flex: 1 0 auto; }
+.page[hidden] { display: none !important; }
+.page { animation: page-in .22s ease both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+.panel, .summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+.panel { padding: 18px; }
+.panel h2 { margin: 0; font-size: 16px; color: var(--text-900); }
+.panel p { margin: 3px 0 0; color: var(--text-500); font-size: 12px; }
+.panel-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.panel-title-row--space { justify-content: space-between; }
+.title-inline { display: flex; align-items: center; gap: 10px; }
+
+.summary-grid { display: grid; gap: 14px; margin-bottom: 20px; }
+.summary-grid--five { grid-template-columns: repeat(5, 1fr); }
+.summary-grid--four { grid-template-columns: repeat(4, 1fr); }
+.summary-grid--three { grid-template-columns: repeat(3, 1fr); }
+.summary-card { min-height: 118px; padding: 18px; display: flex; align-items: center; gap: 15px; }
+.summary-card small { display: block; color: var(--text-700); font-weight: 700; font-size: 13px; }
+.summary-card strong { display: block; font-size: 24px; line-height: 1.05; margin-top: 3px; color: #214f86; }
+.summary-card p { margin: 5px 0 0; font-size: 11px; color: var(--text-500); }
+.summary-card__status { font-size: 18px !important; max-width: 190px; }
+.summary-icon { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto; }
+.summary-icon.small { width: 38px; height: 38px; }
+.summary-icon .icon { width: 24px; height: 24px; }
+.summary-icon--green { background: #ddf7e8; color: #10aa57; }
+.summary-icon--blue { background: #e1f0ff; color: var(--blue-600); }
+.summary-icon--orange { background: #fff0df; color: var(--orange-500); }
+.summary-icon--purple { background: #efe7ff; color: var(--purple-600); }
+.summary-icon--red { background: #ffe5e8; color: var(--red-600); }
+.text-green { color: #09a853 !important; }
+.text-blue { color: #1681f7 !important; }
+.text-purple { color: #7950d8 !important; }
+.text-red { color: var(--red-600) !important; }
+
+.status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+.status-dot--ok { background: #06bd3a; }
+.status-dot--off { background: #bdcad8; }
+
+/* Interruptor reutilizado em tabelas e controles de bomba. */
+.switch { width: 42px; height: 24px; border-radius: 999px; border: 0; background: #aebccc; position: relative; padding: 0; transition: background .2s; }
+.switch::after { content: ""; position: absolute; width: 18px; height: 18px; top: 3px; left: 3px; border-radius: 50%; background: white; box-shadow: 0 1px 4px rgba(0,0,0,.18); transition: transform .2s; }
+.switch.is-on { background: var(--blue-600); }
+.switch.is-on::after { transform: translateX(18px); }
+.switch:focus-visible { outline: 3px solid rgba(47,134,238,.25); outline-offset: 2px; }
+
+.pill { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; min-height: 28px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.pill--on { color: #18a558; background: #dff7e8; }
+.pill--off { color: #7f91a4; background: #e9eef3; }
+.pill--mode { color: #2d78c7; background: #e7f2ff; }
+.pill--blue { color: #1681f7; background: #e4f2ff; }
+.pill--orange { color: #ff7a1a; background: #fff0df; }
+
+.data-table { width: 100%; border-collapse: collapse; color: var(--text-700); font-size: 13px; }
+.data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #edf2f6; vertical-align: middle; }
+.data-table th { color: var(--text-900); font-weight: 800; background: #f5f8fc; }
+.table-wrapper { width: 100%; overflow-x: auto; }
+
+.text-button { border: 0; color: var(--blue-600); background: #eaf4ff; padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.text-button:hover { background: #dceeff; }
+
+/* ------------------------------
+   Dashboard / Início
+   ------------------------------ */
+.dashboard-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 20px; align-items: stretch; }
+.reservoirs-panel { min-height: 560px; }
+.reservoir-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; height: 100%; }
+.reservoir { display: flex; flex-direction: column; min-width: 0; }
+.reservoir__heading { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.reservoir__heading h2 { font-size: 15px; }
+.reservoir__heading p { margin: 2px 0 0; }
+.water-gauge { --size: 240px; width: var(--size); height: var(--size); margin: 10px auto 8px; border-radius: 50%; border: 16px solid #d9e9f8; position: relative; overflow: hidden; display: grid; place-items: center; background: #f8fbff; box-shadow: inset 0 0 0 6px #1681f7; }
+.water-gauge::before { content: ""; position: absolute; inset: 0; background: conic-gradient(from -90deg, #1185ff calc(var(--level) * 1%), #d8e5f2 0); opacity: .26; }
+.water-gauge__water { position: absolute; left: -8%; right: -8%; bottom: 0; height: calc(var(--level) * 1%); background: linear-gradient(180deg, #54c6f5 0%, #1197f1 30%, #056bf1 100%); border-radius: 50% 50% 0 0 / 12% 12% 0 0; }
+.water-gauge__water::before { content: ""; position: absolute; left: -8%; top: -12px; width: 116%; height: 28px; background: rgba(255,255,255,.35); border-radius: 50%; transform: rotate(-3deg); }
+.water-gauge strong { position: relative; z-index: 2; font-size: 42px; color: #164f91; }
+.reservoir__volume { text-align: center; font-size: 17px !important; color: var(--text-700) !important; }
+.reservoir__volume strong { color: var(--text-900); }
+.reservoir__details { margin: auto 0 0; background: #f2f7fb; border-radius: 9px; padding: 8px 12px; }
+.reservoir__details div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0; }
+.reservoir__details dt { color: var(--text-500); }
+.reservoir__details dd { margin: 0; font-weight: 700; color: var(--text-700); display: flex; align-items: center; gap: 6px; }
+.dashboard-side { display: grid; grid-template-rows: auto 1fr; gap: 18px; }
+.mini-panels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.info-panel { padding: 16px; }
+.state-box { border-radius: 9px; padding: 18px; display: flex; align-items: center; gap: 12px; }
+.state-box--success { background: #e7f8ed; color: #12a253; }
+.state-box strong { display: block; font-size: 14px; }
+.state-box small { color: #7392a0; }
+.state-symbol { font-size: 28px; color: #1eb854; }
+.pump-panel { min-height: 320px; }
+.pump-table td:nth-child(1) { font-weight: 800; color: var(--text-900); }
+.pump-table .state-cell { display: flex; align-items: center; gap: 4px; }
+
+/* ------------------------------
+   Monitoramento
+   ------------------------------ */
+.monitor-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 20px; }
+.monitor-reservoirs { min-height: 580px; }
+.reservoir--compact .water-gauge { --size: 220px; }
+.monitor-side { display: grid; gap: 16px; grid-template-rows: auto 1fr; }
+.chart-panel { overflow: hidden; }
+.line-chart { width: 100%; height: 170px; margin-top: 8px; overflow: visible; }
+.chart-grid path { stroke: #dbe7f1; stroke-width: 1; fill: none; }
+.chart-line { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.chart-line--blue { stroke: #2e8af2; }
+.chart-line--orange { stroke: #ff7a1a; }
+.chart-line--red { stroke: #ef4652; }
+
+/* Gráfico histórico do monitoramento -----------------------------------------
+   O SVG é redesenhado pelo script.js a cada leitura. Os pontos são elementos
+   reais do SVG para aceitar hover, foco por teclado e toque no mobile. */
+.live-history-panel { min-height: 330px; }
+.chart-panel__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.chart-panel__header h2 { margin-bottom: 3px; }
+.chart-panel__subtitle { margin: 0; color: var(--text-500); font-size: 10px; }
+.chart-history-controls { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+.chart-nav-button,
+.chart-live-button {
+  min-width: 36px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text-700);
+  font-weight: 800;
+  cursor: pointer;
+}
+.chart-live-button { padding-inline: 12px; min-width: auto; color: #167be7; }
+.chart-nav-button:hover:not(:disabled),
+.chart-live-button:hover:not(:disabled) { border-color: #9dcafb; background: #f1f8ff; }
+.chart-nav-button:disabled,
+.chart-live-button:disabled { opacity: .38; cursor: default; }
+.chart-range-label { min-width: 132px; text-align: center; color: var(--text-500); font-size: 10px; font-weight: 700; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; color: var(--text-500); font-size: 10px; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.legend-dot--blue { background: #2e8af2; }
+.legend-dot--orange { background: #ff7a1a; }
+.interactive-chart { position: relative; margin-top: 4px; padding-left: 32px; }
+.line-chart--interactive { width: 100%; height: auto; aspect-ratio: 720 / 220; margin-top: 0; overflow: visible; display: block; }
+.chart-y-labels { position: absolute; inset: 9px auto 22px 0; width: 30px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; color: var(--text-500); font-size: 9px; pointer-events: none; }
+.chart-axis-time { fill: #7890a0; font-size: 9px; }
+.chart-point { stroke: #fff; stroke-width: 2.5; cursor: pointer; transition: transform .15s ease, stroke-width .15s ease; transform-box: fill-box; transform-origin: center; }
+.chart-point--blue { fill: #2e8af2; }
+.chart-point--orange { fill: #ff7a1a; }
+.chart-point:hover,
+.chart-point:focus { transform: scale(1.45); stroke-width: 3.5; outline: none; }
+.chart-tooltip {
+  position: absolute;
+  z-index: 8;
+  width: 178px;
+  padding: 9px 11px;
+  border: 1px solid #d7e7f4;
+  border-radius: 8px;
+  background: rgba(255,255,255,.98);
+  box-shadow: 0 8px 22px rgba(30,72,105,.14);
+  pointer-events: none;
+  color: var(--text-700);
+}
+.chart-tooltip[hidden] { display: none; }
+.chart-tooltip strong,
+.chart-tooltip span,
+.chart-tooltip small { display: block; }
+.chart-tooltip strong { color: var(--text-900); font-size: 10px; }
+.chart-tooltip span { margin-top: 2px; font-size: 18px; font-weight: 900; color: #167be7; }
+.chart-tooltip small { margin-top: 1px; color: var(--text-500); font-size: 9px; }
+.chart-empty { margin: 8px 0 0; padding: 10px; border-radius: 7px; background: #f6f9fc; color: var(--text-500); text-align: center; font-size: 10px; }
+.monitor-lower { display: grid; grid-template-columns: 1.18fr .82fr; gap: 16px; }
+.status-list { display: grid; gap: 8px; }
+.status-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; }
+.status-row--success { background: #e6f8ec; }
+.status-row small { display: block; color: #68879b; }
+.status-row strong { color: #0ca256; }
+.status-row p { margin: 0; font-size: 10px; }
+.info-note { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 7px; background: #e5f3ff; color: #2f76b9 !important; margin-top: 8px !important; }
+.reading-list { list-style: none; padding: 0; margin: 4px 0 12px; }
+.reading-list li { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid #edf2f6; font-size: 11px; }
+.reading-list span { font-weight: 800; color: var(--text-900); }
+.reading-list time { color: var(--text-500); }
+.readings-panel .text-button { width: 100%; }
+
+/* ------------------------------
+   Controle
+   ------------------------------ */
+.control-grid { display: grid; grid-template-columns: 2.1fr .9fr; gap: 18px; }
+.control-main, .control-side { display: grid; gap: 18px; align-content: start; }
+.system-control-layout { display: grid; grid-template-columns: 1.45fr .75fr; gap: 20px; }
+.mode-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.mode-card { min-height: 132px; border: 1px solid var(--border); background: #fff; border-radius: 10px; padding: 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; text-align: left; color: var(--text-900); }
+.mode-card.is-selected { border-color: var(--blue-600); background: #eaf4ff; box-shadow: inset 0 0 0 1px var(--blue-600); }
+.mode-card strong { display: block; margin-bottom: 5px; }
+.mode-card small { color: var(--text-500); display: block; line-height: 1.35; }
+.radio-dot { width: 20px; height: 20px; border: 2px solid var(--text-500); border-radius: 50%; position: relative; }
+.mode-card.is-selected .radio-dot { border-color: var(--blue-600); }
+.mode-card.is-selected .radio-dot::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--blue-600); }
+.system-actions { display: grid; gap: 12px; }
+.primary-action { min-height: 64px; border: 0; border-radius: 8px; color: white; padding: 12px 18px; display: flex; align-items: center; justify-content: center; gap: 10px; text-align: left; }
+.primary-action--success { background: #09ad58; }
+.primary-action--danger { background: #f5222d; }
+.primary-action strong, .primary-action small { display: block; }
+.primary-action small { opacity: .8; font-size: 10px; }
+.control-table td:first-child { font-weight: 900; color: var(--text-900); }
+.control-table .pump-function strong { display: block; }
+.control-table .pump-function small { color: var(--text-500); }
+.timeline-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.timeline-item { display: grid; grid-template-columns: 12px 1fr auto; gap: 10px; align-items: start; font-size: 11px; }
+.timeline-item__dot { width: 8px; height: 8px; border-radius: 50%; background: #12af5a; margin-top: 4px; }
+.timeline-item__dot--danger { background: var(--red-600); }
+.timeline-item strong { display: block; color: var(--text-900); }
+.timeline-item small { color: var(--text-500); }
+.timeline-item time { color: var(--text-500); }
+.messages-panel { display: grid; gap: 10px; }
+.message { padding: 12px 14px; border-radius: 8px; display: grid; gap: 3px; }
+.message--success { background: #ddf7e8; color: #159153; }
+.message--info { background: #e3f3ff; color: #2676b6; }
+.message--warning { background: #fff0db; color: #d26a00; }
+.message small { opacity: .8; }
+
+/* ------------------------------
+   Histórico
+   ------------------------------ */
+.filter-panel { display: grid; grid-template-columns: 1.05fr 1.7fr auto; gap: 24px; align-items: end; margin-bottom: 18px; }
+.filter-group { display: grid; gap: 8px; }
+.filter-group--grow { min-width: 0; }
+.filter-group label, .label-like { font-size: 12px; font-weight: 800; color: var(--text-900); }
+.date-range { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; }
+.date-range input { border: 1px solid var(--border); border-radius: 7px; padding: 10px; color: var(--text-700); background: white; }
+.quick-filters { display: grid; grid-template-columns: repeat(4, minmax(110px, 1fr)); gap: 10px; }
+.quick-filters button, .alert-filters button { border: 1px solid var(--border); background: white; color: var(--text-700); padding: 10px 12px; border-radius: 7px; font-weight: 700; }
+.quick-filters button.is-active, .alert-filters button.is-active { background: var(--blue-600); color: white; border-color: var(--blue-600); }
+.apply-button { border: 0; background: #1681f7; color: white; min-height: 48px; border-radius: 8px; padding: 0 22px; display: inline-flex; align-items: center; gap: 8px; font-weight: 800; }
+.history-summary .summary-card { min-height: 106px; }
+.history-chart-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-block: 14px;
+}
+.history-chart-toolbar strong { display: block; color: var(--text-900); font-size: 13px; }
+.history-chart-toolbar p { margin: 3px 0 0; color: var(--text-500); font-size: 10px; }
+.history-charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 18px; }
+.chart-card { min-height: 300px; }
+.history-level-card { min-width: 0; }
+.history-interactive-chart { margin-top: 8px; padding-left: 30px; }
+.line-chart--history-interactive {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 520 / 220;
+  overflow: visible;
+}
+.history-interactive-chart .chart-y-labels { inset: 9px auto 22px 0; width: 28px; }
+.chart-tooltip[data-series="reserva"] span { color: #ff7a1a; }
+.line-chart.large { height: 220px; }
+.chart-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-500); }
+.history-bottom { display: grid; grid-template-columns: .9fr 1.3fr; gap: 18px; }
+.pump-runtime-card { min-height: 330px; min-width: 0; }
+.pump-runtime-chart { position: relative; display: grid; grid-template-columns: 38px minmax(0, 1fr); min-height: 220px; margin-top: 12px; padding-bottom: 26px; }
+.pump-runtime-axis { position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding: 2px 8px 22px 0; color: var(--text-500); font-size: 9px; }
+.pump-runtime-axis small { position: absolute; left: -18px; top: 50%; transform: rotate(-90deg) translateX(-50%); transform-origin: left top; white-space: nowrap; color: #51718b; font-weight: 700; }
+.pump-runtime-plot { position: relative; min-width: 0; border-left: 1px solid #d9e6f0; border-bottom: 1px solid #d9e6f0; background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(25% - 1px), #d9e6f0 calc(25% - 1px), #d9e6f0 25%); }
+.pump-runtime-groups { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, minmax(48px, 1fr)); gap: 8px; align-items: stretch; padding: 0 8px; }
+.pump-runtime-day { min-width: 0; display: grid; grid-template-rows: minmax(0, 1fr) 22px; align-items: end; }
+.pump-runtime-bars { height: 100%; display: flex; align-items: end; justify-content: center; gap: 3px; min-width: 0; }
+.pump-runtime-bar { position: relative; width: min(15px, 22%); height: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: end; justify-content: stretch; border-radius: 3px 3px 0 0; }
+.pump-runtime-bar span { display: block; width: 100%; height: var(--pump-height); min-height: 0; border-radius: 3px 3px 0 0; transition: height .35s ease, filter .15s ease, transform .15s ease; transform-origin: bottom; }
+.pump-runtime-bar--b1 span, .pump-runtime-dot--b1 { background: #197cf0; }
+.pump-runtime-bar--b2 span, .pump-runtime-dot--b2 { background: #6240d3; }
+.pump-runtime-bar--b3 span, .pump-runtime-dot--b3 { background: #29a9e8; }
+.pump-runtime-bar--b4 span, .pump-runtime-dot--b4 { background: #47ad53; }
+.pump-runtime-bar:hover span, .pump-runtime-bar:focus span { filter: brightness(.92); transform: scaleX(1.12); }
+.pump-runtime-bar:focus { outline: 2px solid #0e67c4; outline-offset: 2px; }
+.pump-runtime-day time { display: block; padding-top: 7px; color: #718da4; font-size: 9px; text-align: center; white-space: nowrap; }
+.pump-runtime-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 20px; margin-top: 12px; }
+.pump-runtime-legend span { display: grid; grid-template-columns: 10px auto; column-gap: 6px; align-items: center; color: var(--text-700); font-size: 10px; }
+.pump-runtime-legend i { width: 9px; height: 9px; border-radius: 50%; grid-row: 1 / span 2; }
+.pump-runtime-legend strong { font-size: 10px; line-height: 1; }
+.pump-runtime-legend small { color: var(--text-500); font-size: 8px; line-height: 1.2; }
+.pump-runtime-note { margin: 8px 0 0; color: var(--text-500); font-size: 9px; text-align: center; }
+.pump-runtime-tooltip { position: absolute; z-index: 8; min-width: 155px; max-width: 190px; padding: 9px 11px; border: 1px solid #dce7f1; border-radius: 8px; background: rgba(255,255,255,.97); box-shadow: 0 7px 24px rgba(22,69,108,.15); pointer-events: none; }
+.pump-runtime-tooltip[hidden] { display: none; }
+.pump-runtime-tooltip strong, .pump-runtime-tooltip span, .pump-runtime-tooltip b, .pump-runtime-tooltip small { display: block; }
+.pump-runtime-tooltip strong { color: var(--text-900); font-size: 11px; }
+.pump-runtime-tooltip span { margin-top: 1px; color: var(--text-500); font-size: 9px; }
+.pump-runtime-tooltip b { margin-top: 5px; color: #167be7; font-size: 15px; }
+.pump-runtime-tooltip small { margin-top: 2px; color: var(--text-500); font-size: 8px; }
+.history-table { font-size: 11px; }
+
+/* ------------------------------
+   Alertas
+   ------------------------------ */
+.alerts-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 18px; }
+.alert-list-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 12px; }
+.alert-list-header h2 { font-size: 18px; }
+.search-field { width: min(310px, 100%); border: 1px solid var(--border); background: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: var(--text-500); }
+.search-field input { width: 100%; border: 0; outline: 0; padding: 10px 0; color: var(--text-700); background: transparent; }
+.alert-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.alert-filters button { min-width: 140px; padding-block: 8px; font-size: 12px; }
+.alert-list { display: grid; gap: 8px; }
+.alert-item { width: 100%; border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 12px 14px; display: grid; grid-template-columns: 34px auto 1fr auto auto auto; gap: 10px; align-items: center; text-align: left; color: var(--text-700); }
+.alert-item:hover, .alert-item.is-selected { border-color: #bddcff; box-shadow: 0 2px 10px rgba(34,111,185,.08); }
+.alert-item.is-critical { background: #fff0f1; border-color: #ffd5d9; }
+.alert-severity-icon { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; flex: 0 0 auto; }
+.alert-severity-icon .icon-image { width: 18px; height: 18px; }
+.alert-severity-icon--critical { background: #ffe0e4; color: var(--red-600); }
+.alert-severity-icon--warning { background: #fff0d8; color: #ef8a13; }
+.alert-severity-icon--info { background: #e4f2ff; color: #1681f7; }
+.alert-severity-icon--success { background: #ddf7e8; color: #18a74f; }
+.alert-severity { padding: 5px 9px; border-radius: 999px; font-size: 10px; font-weight: 900; white-space: nowrap; }
+.alert-severity--critical { background: #ffe0e4; color: var(--red-600); }
+.alert-severity--warning { background: #fff0d8; color: #ef8a13; }
+.alert-severity--info { background: #e4f2ff; color: #1681f7; }
+.alert-severity--success { background: #ddf7e8; color: #18a74f; }
+.alert-item__copy strong { display: block; color: var(--text-900); font-size: 12px; }
+.alert-item__copy small { display: block; color: var(--text-500); font-size: 10px; margin-top: 2px; }
+.alert-meta { color: var(--text-700); font-size: 10px; white-space: nowrap; }
+.alert-status { font-size: 10px; border-radius: 999px; padding: 5px 9px; background: #e9f4ff; color: #1681f7; font-weight: 800; }
+.alert-status--active { background: #ffe7e9; color: var(--red-600); }
+.alert-detail-panel { align-self: start; }
+.alert-detail__title { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.alert-detail__critical { background: #ffe4e7; border-radius: 9px; padding: 16px; margin-bottom: 14px; }
+.alert-detail__critical .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.alert-detail__critical strong { display: block; color: #c52a35; }
+.alert-detail__critical p { margin-top: 6px; color: #87585e; }
+.detail-list { margin: 0; }
+.detail-list div { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.detail-list dt { color: var(--text-500); }
+.detail-list dd { margin: 0; color: var(--text-700); font-weight: 700; }
+.recommendations { background: #e9f5ff; border-radius: 9px; padding: 14px; margin-top: 14px; }
+.recommendations h3 { margin: 0 0 7px; font-size: 13px; color: #226baa; }
+.recommendations ol { margin: 0; padding-left: 20px; color: #507394; font-size: 11px; }
+.detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.button { min-height: 46px; border-radius: 8px; padding: 0 16px; font-weight: 800; border: 1px solid transparent; }
+.button--primary { background: #1681f7; color: white; }
+.button--secondary { background: white; color: var(--text-700); border-color: var(--border); }
+
+.alert-detail__title h2 { margin: 0; font-size: 18px; color: var(--text-900); }
+.alert-detail__title p { margin: 3px 0 0; color: var(--text-500); font-size: 12px; }
+.alert-detail__warning { background: #fff3e3; }
+.alert-detail__warning strong { color: #c96a00; }
+.alert-detail__warning p { color: #8b6836; }
+.alert-detail__info { background: #eaf5ff; }
+.alert-detail__info strong { color: #1d70bf; }
+.alert-detail__info p { color: #5c7ea2; }
+.alert-detail__success { background: #e7f8ee; }
+.alert-detail__success strong { color: #18864a; }
+.alert-detail__success p { color: #4b7a60; }
+
+/* ------------------------------
+   Rodapé, toast e modal
+   ------------------------------ */
+.status-footer { min-height: 48px; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--text-500); font-size: 11px; border-top: 1px solid var(--border); margin-top: auto; padding: 10px 0; }
+.status-footer span { display: inline-flex; align-items: center; gap: 7px; }
+.status-footer .icon { width: 15px; height: 15px; }
+.toast { position: fixed; right: 24px; bottom: 24px; z-index: 50; min-width: 260px; max-width: min(420px, calc(100vw - 48px)); padding: 13px 16px; border-radius: 10px; color: white; background: #163b68; box-shadow: 0 10px 30px rgba(0,0,0,.18); transform: translateY(20px); opacity: 0; pointer-events: none; transition: .2s ease; }
+.toast.is-visible { transform: none; opacity: 1; }
+.confirm-dialog { width: min(440px, calc(100vw - 32px)); border: 0; border-radius: 14px; padding: 0; box-shadow: 0 25px 70px rgba(0,0,0,.28); }
+.confirm-dialog::backdrop { background: rgba(20,43,70,.45); backdrop-filter: blur(2px); }
+.confirm-dialog form { padding: 24px; text-align: center; }
+.dialog-icon { width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center; color: #d46e00; background: #fff0db; }
+.dialog-icon .icon { width: 27px; height: 27px; }
+.confirm-dialog h2 { margin: 0; color: var(--text-900); }
+.confirm-dialog p { color: var(--text-500); }
+.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+
+/* ------------------------------
+   Responsividade
+   ------------------------------ */
+@media (max-width: 1180px) {
+  .summary-grid--five { grid-template-columns: repeat(3, 1fr); }
+  .dashboard-grid, .monitor-grid { grid-template-columns: 1fr; }
+  .control-grid { grid-template-columns: 1fr; }
+  .control-side { grid-template-columns: repeat(2, 1fr); }
+  .alerts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .header__content, .nav__content, .app-main, .status-footer { width: min(100% - 24px, var(--content-width)); }
+  .brand__logo { width: 50px; height: 50px; }
+  .header__content { min-height: 82px; }
+    .brand__text small { display: none; }
+  .brand__text strong { font-size: 26px; }
+  .user-name, .user-caret, .header__divider { display: none; }
+  .user-avatar { width: 42px; height: 42px; }
+  .mobile-only { display: grid !important; }
+
+  .main-nav { position: fixed; inset: 82px auto auto 0; width: min(320px, 86vw); height: calc(100dvh - 82px); transform: translateX(-102%); transition: transform .24s ease; z-index: 40; box-shadow: 12px 0 30px rgba(0,0,0,.18); }
+  .main-nav.is-open { transform: translateX(0); }
+  .nav__content { width: 100%; height: 100%; display: grid; align-content: start; gap: 8px; padding: 18px; }
+  .nav-item { width: 100%; justify-content: flex-start; padding-inline: 18px; }
+
+  .summary-grid--five, .summary-grid--four, .summary-grid--three { grid-template-columns: repeat(2, 1fr); }
+  .reservoir-grid, .history-charts, .history-bottom, .monitor-lower, .control-side { grid-template-columns: 1fr; }
+  .system-control-layout { grid-template-columns: 1fr; }
+  .filter-panel { grid-template-columns: 1fr; align-items: stretch; }
+  .quick-filters { grid-template-columns: repeat(2, 1fr); }
+  .filter-panel .apply-button { justify-content: center; }
+  .alert-item { grid-template-columns: 34px auto 1fr auto; }
+  .alert-item .alert-meta:nth-of-type(2), .alert-item .alert-status { display: none; }
+}
+
+@media (max-width: 620px) {
+  :root { --radius-lg: 12px; }
+  .brand__logo { width: 42px; height: 42px; }
+  .app-main { padding-top: 14px; }
+  .header__content, .app-main, .status-footer { width: min(100% - 20px, var(--content-width)); }
+  .brand { gap: 4px; }
+    .brand__text strong { font-size: 22px; }
+  .header__actions { gap: 8px; }
+  .notification-button { display: none; }
+
+  /* Em telas pequenas, os cards-resumo viram uma faixa rolável como no Figma mobile. */
+  .summary-grid--five, .summary-grid--four, .summary-grid--three {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .summary-card { flex: 0 0 78%; min-height: 92px; scroll-snap-align: start; padding: 14px; }
+  .summary-card strong { font-size: 20px; }
+  .summary-icon { width: 42px; height: 42px; }
+
+  .panel { padding: 14px; }
+  .reservoir-grid { gap: 14px; }
+  .water-gauge { --size: min(72vw, 260px); }
+  .reservoir--compact .water-gauge { --size: min(70vw, 235px); }
+  .mini-panels { grid-template-columns: 1fr; }
+  .mode-selector { grid-template-columns: 1fr; }
+  .control-table { min-width: 620px; }
+  .pump-table { min-width: 520px; }
+  .pump-runtime-chart { overflow-x: auto; grid-template-columns: 34px minmax(650px, 1fr); padding-bottom: 30px; }
+  .pump-runtime-axis { position: sticky; left: 0; z-index: 3; background: white; }
+  .pump-runtime-groups { min-width: 610px; }
+  .pump-runtime-legend { justify-content: flex-start; }
+  .history-table { min-width: 640px; }
+  .filter-panel { padding: 14px; }
+  .quick-filters { grid-template-columns: 1fr 1fr; }
+  .history-charts { gap: 14px; }
+  .history-chart-toolbar { align-items: stretch; flex-direction: column; }
+  .history-chart-toolbar .chart-history-controls { justify-content: flex-start; }
+  .history-interactive-chart { padding-left: 27px; overflow-x: auto; }
+  .line-chart--history-interactive { min-width: 500px; }
+  .line-chart.large { height: 180px; }
+  .chart-panel__header { flex-direction: column; gap: 10px; }
+  .chart-history-controls { width: 100%; justify-content: flex-start; }
+  .chart-range-label { flex: 1; min-width: 110px; text-align: left; }
+  .interactive-chart { padding-left: 27px; overflow-x: auto; }
+  .line-chart--interactive { min-width: 560px; }
+  .chart-y-labels { width: 25px; }
+  .alert-list-header { align-items: stretch; flex-direction: column; }
+  .search-field { width: 100%; }
+  .alert-filters { display: grid; grid-template-columns: 1fr 1fr; }
+  .alert-filters button { min-width: 0; }
+  .alert-item { grid-template-columns: 28px 1fr auto; gap: 8px; }
+  .alert-item .alert-severity { display: none; }
+  .alert-item .alert-meta { display: none; }
+  .detail-list div { grid-template-columns: 1fr; gap: 3px; }
+  .detail-actions { grid-template-columns: 1fr; }
+  .status-footer { min-height: 58px; flex-direction: column; justify-content: center; gap: 4px; align-items: flex-start; }
+}
+
+
+/* ============================================================================
+   AquaFlow v2 — integração visual com telemetria do ESP32
+   ---------------------------------------------------------------------------
+   Estas regras complementam o layout original do Figma sem alterar a estrutura
+   principal. O nível da água é controlado por --level (0–100) via JavaScript.
+   ============================================================================ */
+.connection-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f7fafc;
+  color: var(--text-700);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.connection-chip.is-online { background: var(--green-100); border-color: #b9e8c9; color: #158047; }
+.connection-chip.is-offline { background: var(--red-100); border-color: #ffc6cb; color: #b4232c; }
+.connection-chip.is-mock { background: var(--blue-100); border-color: #c7e2ff; color: var(--blue-700); }
+
+/* O preenchimento acompanha o nível recebido do ESP32.
+   A superfície foi deixada propositalmente suave: ela balança poucos graus,
+   como água dentro de uma garrafa sendo movimentada devagar. */
+.water-gauge::before { display: none; }
+
+.water-gauge__water {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--level) * 1%);
+  border-radius: 0;
+  background: linear-gradient(180deg, #42bff2 0%, #1697e8 42%, #0874df 75%, #0564cf 100%);
+  transition: height 900ms cubic-bezier(.2,.8,.2,1), background 300ms ease;
+  box-shadow:
+    inset 14px 0 24px rgba(255,255,255,.05),
+    inset -14px 0 24px rgba(0,68,170,.08);
+  will-change: height;
+}
+
+/* Superfície principal da água: baixa amplitude e movimento lento. */
+.water-gauge__water::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: -6%;
+  top: -7px;
+  width: 112%;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(104, 210, 248, .9);
+  transform-origin: 50% 50%;
+  animation: aquaflow-water-slosh 5.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Reflexo discreto para dar profundidade sem parecer uma onda de mar. */
+.water-gauge__water::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 10%;
+  top: -2px;
+  width: 80%;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  transform-origin: 50% 50%;
+  animation: aquaflow-water-highlight 6.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.water-gauge strong {
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 1px 8px rgba(255,255,255,.9);
+}
+
+.water-gauge.is-critical { box-shadow: inset 0 0 0 6px #ef3f4b; border-color: #ffd7da; }
+.water-gauge.is-warning { box-shadow: inset 0 0 0 6px #ff9b3d; border-color: #ffe6cc; }
+
+@keyframes aquaflow-water-slosh {
+  0%, 100% { transform: translateY(0) rotate(-1deg) scaleX(1.01); }
+  25%      { transform: translateY(1px) rotate(.35deg) scaleX(.997); }
+  50%      { transform: translateY(0) rotate(1deg) scaleX(1.01); }
+  75%      { transform: translateY(-1px) rotate(-.3deg) scaleX(.998); }
+}
+
+@keyframes aquaflow-water-highlight {
+  0%, 100% { transform: translateX(-3px) rotate(.55deg); opacity: .14; }
+  50%      { transform: translateX(3px) rotate(-.55deg); opacity: .24; }
+}
+
+.nav-item { text-decoration: none; }
+
+/* O gráfico em tempo real recebe pontos do JavaScript. A animação suaviza as
+   mudanças entre uma leitura do ESP32 e a próxima. */
+.chart-line { transition: points .35s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .water-gauge__water { transition: none; }
+  .water-gauge__water::before,
+  .water-gauge__water::after { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .connection-chip { display: none; }
+}
+
+/* Estados de nível usados quando o JavaScript troca a classe do indicador. */
+.status-dot--warning { background: #ff9b3d; }
+.status-dot--danger { background: var(--red-600); }
+
+
+/* Monitoramento — indicadores maiores para ocupar melhor o painel.
+   Afeta somente a página de Monitoramento; o Dashboard permanece igual. */
+.monitor-reservoirs .reservoir-grid {
+  align-items: stretch;
+}
+
+.monitor-reservoirs .reservoir--compact .water-gauge {
+  --size: clamp(245px, 20vw, 300px);
+  margin-top: 18px;
+  margin-bottom: 16px;
+}
+
+.monitor-reservoirs .reservoir__heading h2 {
+  font-size: 17px;
+}
+
+.monitor-reservoirs .reservoir__heading p {
+  font-size: 12px;
+}
+
+.monitor-reservoirs .reservoir__volume {
+  margin: 8px 0 16px;
+  font-size: 19px !important;
+}
+
+.monitor-reservoirs .reservoir__details {
+  padding: 12px 14px;
+  font-size: 12px;
+}
+
+.monitor-reservoirs .reservoir__details div {
+  padding: 7px 0;
+}
+
+@media (max-width: 1180px) {
+  .monitor-reservoirs .reservoir--compact .water-gauge {
+    --size: clamp(220px, 22vw, 260px);
+  }
+}
+
+@media (max-width: 760px) {
+  .monitor-reservoirs .reservoir--compact .water-gauge {
+    --size: min(76vw, 285px);
+    margin-top: 12px;
+  }
+}
+
+
+/* Ajuste v5 — remove o rebordo cinza dos indicadores.
+   Mantemos apenas um aro azul fino para separar a água do fundo. */
+.water-gauge {
+  border: 6px solid #1681f7;
+  box-shadow: none;
+  background: #f8fbff;
+}
+
+/* Em níveis críticos/atenção, a cor do aro continua comunicando o estado,
+   sem recriar o rebordo grosso anterior. */
+.water-gauge.is-critical {
+  border-color: #ef3f4b;
+  box-shadow: none;
+}
+
+.water-gauge.is-warning {
+  border-color: #ff9b3d;
+  box-shadow: none;
+}
+
+/* Na página Monitoramento, o espaço liberado pelo rebordo vira área útil do
+   gráfico e o círculo cresce um pouco para preencher melhor o painel. */
+.monitor-reservoirs .reservoir--compact .water-gauge {
+  --size: clamp(270px, 21vw, 325px);
+}
+
+@media (max-width: 1180px) {
+  .monitor-reservoirs .reservoir--compact .water-gauge {
+    --size: clamp(240px, 23vw, 285px);
+  }
+}
+
+@media (max-width: 760px) {
+  .monitor-reservoirs .reservoir--compact .water-gauge {
+    --size: min(82vw, 300px);
+  }
+}
+
+
+/* =========================================================
+   ÍCONES EM IMAGEM
+   Mantém os PNGs enviados pelo usuário com tamanho consistente
+   e facilita futuras trocas na pasta /assets.
+   ========================================================= */
+.icon-image,
+.header-icon-image,
+.nav-icon-image,
+.summary-icon__image,
+.state-box__icon-image,
+.connection-state__icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header-icon-image {
+  width: 34px;
+  height: 34px;
+}
+
+.user-avatar img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+}
+
+.nav-item__icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.nav-icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+.summary-icon__image {
+  width: 34px;
+  height: 34px;
+}
+
+.summary-icon.small .summary-icon__image {
+  width: 30px;
+  height: 30px;
+}
+
+.panel-title-row .summary-icon .summary-icon__image {
+  width: 32px;
+  height: 32px;
+}
+
+.reservoir__heading .summary-icon .summary-icon__image {
+  width: 28px;
+  height: 28px;
+}
+
+.state-box__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ddf7e8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.state-box__icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+.connection-state__icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.connection-state__icon {
+  width: 22px;
+  height: 22px;
+}
+
+
+/* =========================================================
+   AJUSTES FINOS — PÁGINA DE ALERTAS
+   Aproxima a implementação do protótipo do Figma.
+   ========================================================= */
+.page[data-page-content="alertas"] .summary-card {
+  min-height: 116px;
+  padding: 20px 18px;
+}
+
+.page[data-page-content="alertas"] .summary-card small {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.page[data-page-content="alertas"] .summary-card strong {
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+.page[data-page-content="alertas"] .summary-card strong.text-blue {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.page[data-page-content="alertas"] .summary-card p {
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.page[data-page-content="alertas"] .summary-icon {
+  width: 54px;
+  height: 54px;
+  background: transparent !important;
+  border-radius: 0;
+}
+
+.page[data-page-content="alertas"] .summary-icon__image {
+  width: 54px;
+  height: 54px;
+}
+
+.page[data-page-content="alertas"] .summary-icon--alert-plain {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.page[data-page-content="alertas"] .summary-icon--alert-plain.summary-icon--red {
+  background: #ffe5e8 !important;
+  color: var(--red-600);
+}
+
+.page[data-page-content="alertas"] .summary-icon--alert-plain.summary-icon--green {
+  background: #ddf7e8 !important;
+  color: #10aa57;
+}
+
+.page[data-page-content="alertas"] .summary-icon--alert-plain .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.page[data-page-content="alertas"] .summary-card--resolved .summary-icon--alert-plain .icon {
+  width: 23px;
+  height: 23px;
+}
+
+.page[data-page-content="alertas"] .alert-list-panel,
+.page[data-page-content="alertas"] .alert-detail-panel {
+  min-height: 360px;
+}
+
+.page[data-page-content="alertas"] .alert-item {
+  grid-template-columns: 28px auto 1fr auto auto auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.page[data-page-content="alertas"] .alert-severity-icon {
+  width: 28px;
+  height: 28px;
+  background: transparent !important;
+  border-radius: 0;
+}
+
+.page[data-page-content="alertas"] .alert-severity-icon .icon-image {
+  width: 28px;
+  height: 28px;
+}
+
+.page[data-page-content="alertas"] .alert-item__copy strong {
+  font-size: 12px;
+}
+
+.page[data-page-content="alertas"] .alert-item__copy small,
+.page[data-page-content="alertas"] .alert-meta,
+.page[data-page-content="alertas"] .alert-status,
+.page[data-page-content="alertas"] .alert-severity {
+  font-size: 10px;
+}
+
+.page[data-page-content="alertas"] .alert-detail__title .alert-severity-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.page[data-page-content="alertas"] .alert-detail__title .alert-severity-icon .icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+#connectionState {
+  margin-left: auto;
+}
+
+@media (max-width: 900px) {
+  #connectionState {
+    margin-left: 0;
+  }
+}
+
+
+/* =========================================================
+   ALERTAS v2 — refinamento visual conforme o Figma
+   ========================================================= */
+body[data-page="alertas"] .header__content {
+  min-height: 78px;
+  gap: 20px;
+}
+
+body[data-page="alertas"] .brand {
+  gap: 10px;
+}
+
+body[data-page="alertas"] .brand__logo {
+  width: 46px;
+  height: 46px;
+}
+
+body[data-page="alertas"] .brand__text strong {
+  font-size: 27px;
+  letter-spacing: -1px;
+}
+
+body[data-page="alertas"] .brand__text small {
+  font-size: 11px;
+  margin-top: -1px;
+}
+
+body[data-page="alertas"] .header__actions {
+  gap: 18px;
+}
+
+body[data-page="alertas"] .header__divider {
+  height: 48px;
+}
+
+body[data-page="alertas"] .notification-button {
+  width: 42px;
+  height: 42px;
+  color: var(--green-600);
+}
+
+body[data-page="alertas"] .header-bell-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--green-600);
+}
+
+body[data-page="alertas"] .notification-dot {
+  display: none;
+}
+
+body[data-page="alertas"] .user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--green-600);
+  color: var(--green-600);
+}
+
+body[data-page="alertas"] .user-avatar .icon {
+  width: 27px;
+  height: 27px;
+  color: var(--green-600);
+}
+
+body[data-page="alertas"] .user-name {
+  font-size: 16px;
+}
+
+body[data-page="alertas"] .user-caret {
+  font-size: 18px;
+}
+
+body[data-page="alertas"] .nav__content {
+  min-height: 52px;
+  gap: 18px;
+}
+
+body[data-page="alertas"] .nav-item {
+  min-height: 40px;
+  padding: 0 18px;
+  gap: 8px;
+  font-size: 14px;
+}
+
+body[data-page="alertas"] .nav-item__icon {
+  width: 25px;
+  height: 25px;
+}
+
+body[data-page="alertas"] .nav-icon-image {
+  width: 24px;
+  height: 24px;
+}
+
+/* O check possui mais espaço transparente no arquivo, então recebe escala
+   visual um pouco maior para conversar com os ícones de atenção. */
+.page[data-page-content="alertas"] .summary-card--resolved .summary-icon__image {
+  width: 54px;
+  height: 54px;
+  max-width: none;
+  max-height: none;
+}
+
+/* Relógio vetorial em cinza azulado, no mesmo peso visual dos outros cards. */
+.page[data-page-content="alertas"] .summary-icon--clock {
+  width: 54px;
+  height: 54px;
+  background: transparent !important;
+  color: #60758c;
+}
+
+.page[data-page-content="alertas"] .alert-summary-clock {
+  width: 46px;
+  height: 46px;
+  color: #60758c;
+}
+
+/* Observações adicionadas pelo usuário no detalhe do alerta. */
+.alert-observations {
+  margin-top: 14px;
+  padding: 13px 14px;
+  border: 1px solid #d9e8f5;
+  border-radius: 9px;
+  background: #f7fbff;
+}
+
+.alert-observations h3 {
+  margin: 0 0 7px;
+  color: var(--text-900);
+  font-size: 13px;
+}
+
+.alert-observations ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-700);
+  font-size: 11px;
+}
+
+.alert-observations li + li {
+  margin-top: 4px;
+}
+
+/* =========================================================
+   ALERTAS v3 — cabeçalho padronizado + legibilidade da lista
+   ========================================================= */
+/*
+  A página de Alertas volta a usar exatamente as mesmas dimensões
+  estruturais do cabeçalho e da navegação das demais páginas.
+  Mantemos apenas o estilo dos ícones de sino/perfil usado em Alertas.
+*/
+body[data-page="alertas"] .header__content {
+  min-height: 118px;
+  gap: 24px;
+}
+
+body[data-page="alertas"] .brand {
+  gap: 14px;
+}
+
+body[data-page="alertas"] .brand__logo {
+  width: 64px;
+  height: 64px;
+}
+
+body[data-page="alertas"] .brand__text strong {
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -1.4px;
+}
+
+body[data-page="alertas"] .brand__text small {
+  font-size: 13px;
+  margin-top: -2px;
+}
+
+body[data-page="alertas"] .header__actions {
+  gap: 22px;
+}
+
+body[data-page="alertas"] .header__divider {
+  height: 74px;
+}
+
+body[data-page="alertas"] .notification-button {
+  width: 46px;
+  height: 46px;
+}
+
+body[data-page="alertas"] .header-bell-icon {
+  width: 30px;
+  height: 30px;
+}
+
+body[data-page="alertas"] .user-avatar {
+  width: 48px;
+  height: 48px;
+  border-width: 3px;
+}
+
+body[data-page="alertas"] .user-avatar .icon {
+  width: 30px;
+  height: 30px;
+}
+
+body[data-page="alertas"] .user-name {
+  font-size: 18px;
+}
+
+body[data-page="alertas"] .user-caret {
+  font-size: 20px;
+}
+
+body[data-page="alertas"] .nav__content {
+  min-height: 82px;
+  gap: 24px;
+}
+
+body[data-page="alertas"] .nav-item {
+  min-height: 58px;
+  padding: 0 28px;
+  gap: 10px;
+  font-size: 16px;
+}
+
+body[data-page="alertas"] .nav-item__icon {
+  width: 32px;
+  height: 32px;
+}
+
+body[data-page="alertas"] .nav-icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+/* Lista de alertas: tipografia maior e mais confortável para leitura. */
+.page[data-page-content="alertas"] .alert-item {
+  padding: 12px 14px;
+  grid-template-columns: 32px auto minmax(0, 1fr) auto auto auto;
+  column-gap: 12px;
+  row-gap: 6px;
+}
+
+.page[data-page-content="alertas"] .alert-item__copy strong {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.page[data-page-content="alertas"] .alert-item__copy small {
+  font-size: 11.5px;
+  line-height: 1.35;
+  margin-top: 3px;
+}
+
+.page[data-page-content="alertas"] .alert-meta {
+  font-size: 11.5px;
+}
+
+.page[data-page-content="alertas"] .alert-status,
+.page[data-page-content="alertas"] .alert-severity {
+  font-size: 11px;
+}
+
+.page[data-page-content="alertas"] .alert-severity-icon,
+.page[data-page-content="alertas"] .alert-severity-icon .icon-image {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 900px) {
+  body[data-page="alertas"] .header__content {
+    min-height: 82px;
+  }
+
+  body[data-page="alertas"] .brand__logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  body[data-page="alertas"] .brand__text strong {
+    font-size: 26px;
+  }
+
+  body[data-page="alertas"] .user-avatar {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 620px) {
+  body[data-page="alertas"] .brand__logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  body[data-page="alertas"] .brand__text strong {
+    font-size: 22px;
+  }
+}
+
+
+/* =========================================================
+   ALERTAS v4 — rodapé mais legível + modal de observação
+   ========================================================= */
+body[data-page="alertas"] .status-footer {
+  min-height: 58px;
+  padding-block: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+body[data-page="alertas"] .status-footer > span {
+  gap: 9px;
+}
+
+body[data-page="alertas"] .status-footer .icon {
+  width: 19px;
+  height: 19px;
+}
+
+body[data-page="alertas"] .status-footer strong {
+  font-size: 13px;
+  color: var(--text-700);
+}
+
+body[data-page="alertas"] .status-footer .status-dot {
+  width: 11px;
+  height: 11px;
+}
+
+body[data-page="alertas"] .connection-state__icon-wrap {
+  width: 29px;
+  height: 29px;
+}
+
+body[data-page="alertas"] .connection-state__icon {
+  width: 27px;
+  height: 27px;
+}
+
+/* Card central para incluir observações sem usar prompt nativo do navegador. */
+.observation-dialog {
+  width: min(650px, calc(100vw - 32px));
+  max-height: min(760px, calc(100dvh - 32px));
+  border: 0;
+  padding: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: 0 30px 80px rgba(20, 55, 90, .28);
+  overflow: visible;
+}
+
+.observation-dialog::backdrop {
+  background: rgba(20, 42, 67, .28);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.observation-dialog__card {
+  background: #fff;
+  border: 1px solid #dbe7f1;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.observation-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid #e6eef6;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fcff 100%);
+}
+
+.observation-dialog__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.observation-dialog__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.observation-dialog__icon img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+}
+
+.observation-dialog__eyebrow {
+  margin: 0 0 2px;
+  color: var(--blue-600);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.observation-dialog__header h2 {
+  margin: 0;
+  color: var(--text-900);
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.observation-dialog__close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f5fa;
+  color: #55728f;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.observation-dialog__close:hover {
+  background: #e4edf6;
+}
+
+.observation-alert-summary {
+  margin: 20px 24px 0;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 14px 22px;
+  border: 1px solid #deebf5;
+  border-radius: 12px;
+  background: #f7fbff;
+}
+
+.observation-alert-summary div {
+  min-width: 0;
+}
+
+.observation-alert-summary span,
+.observation-field > span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-500);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.observation-alert-summary strong {
+  display: block;
+  color: var(--text-900);
+  font-size: 13px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.observation-field {
+  display: block;
+  margin: 18px 24px 0;
+}
+
+.observation-field > span {
+  color: var(--text-700);
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.observation-field textarea {
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+  border: 1px solid #cdddeb;
+  border-radius: 11px;
+  padding: 13px 14px;
+  outline: 0;
+  background: #fff;
+  color: var(--text-900);
+  font: inherit;
+  line-height: 1.45;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.observation-field textarea:focus {
+  border-color: #5ba0ee;
+  box-shadow: 0 0 0 4px rgba(47, 134, 238, .12);
+}
+
+.observation-field small {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-500);
+  font-size: 10px;
+  text-align: right;
+}
+
+.observation-dialog__actions {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 10px;
+  padding: 20px 24px 24px;
+}
+
+@media (max-width: 620px) {
+  body[data-page="alertas"] .status-footer {
+    font-size: 12px;
+  }
+
+  .observation-dialog__header {
+    padding: 18px 18px 15px;
+  }
+
+  .observation-alert-summary {
+    margin: 16px 18px 0;
+    grid-template-columns: 1fr;
+  }
+
+  .observation-field {
+    margin-inline: 18px;
+  }
+
+  .observation-dialog__actions {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+}
+
+
+/* =========================================================
+   PADRÃO GLOBAL v5 — cabeçalho/rodapé iguais à tela de Alertas
+   ========================================================= */
+.header__content {
+  min-height: 118px;
+  gap: 24px;
+}
+
+.brand { gap: 14px; }
+.brand__logo { width: 64px; height: 64px; }
+.brand__text strong {
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -1.4px;
+}
+.brand__text small {
+  font-size: 13px;
+  margin-top: -2px;
+}
+
+.header__actions { gap: 22px; }
+.header__divider { height: 74px; }
+.notification-button {
+  width: 46px;
+  height: 46px;
+  color: var(--green-600);
+}
+.header-bell-icon {
+  width: 30px;
+  height: 30px;
+  color: var(--green-600);
+}
+.notification-dot { display: none; }
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--green-600);
+  color: var(--green-600);
+}
+.user-avatar .icon {
+  width: 30px;
+  height: 30px;
+  color: var(--green-600);
+}
+.user-name { font-size: 18px; }
+.user-caret { font-size: 20px; }
+
+.nav__content {
+  min-height: 82px;
+  gap: 24px;
+}
+.nav-item {
+  min-height: 58px;
+  padding: 0 28px;
+  gap: 10px;
+  font-size: 16px;
+}
+.nav-item__icon { width: 32px; height: 32px; }
+.nav-icon-image { width: 30px; height: 30px; }
+
+.status-footer {
+  min-height: 58px;
+  padding-block: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.status-footer > span { gap: 9px; }
+.status-footer .icon { width: 19px; height: 19px; }
+.status-footer strong {
+  font-size: 13px;
+  color: var(--text-700);
+}
+.status-footer .status-dot { width: 11px; height: 11px; }
+.connection-state__icon-wrap { width: 29px; height: 29px; }
+.connection-state__icon { width: 27px; height: 27px; }
+
+/* =========================================================
+   HISTÓRICO v5 — tipografia mais legível + gráfico de bombas maior
+   ========================================================= */
+.page[data-page-content="historico"] .filter-group label,
+.page[data-page-content="historico"] .label-like {
+  font-size: 13.5px;
+}
+
+.page[data-page-content="historico"] .date-range input,
+.page[data-page-content="historico"] .quick-filters button,
+.page[data-page-content="historico"] .apply-button {
+  font-size: 13.5px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card small {
+  font-size: 14px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card strong {
+  font-size: 27px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card p {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="historico"] .history-chart-toolbar strong {
+  font-size: 15px;
+}
+
+.page[data-page-content="historico"] .history-chart-toolbar p,
+.page[data-page-content="historico"] .chart-panel__subtitle {
+  font-size: 12px;
+}
+
+.page[data-page-content="historico"] .history-level-card h2,
+.page[data-page-content="historico"] .pump-runtime-card h2,
+.page[data-page-content="historico"] .history-table-card h2 {
+  font-size: 16px;
+}
+
+.page[data-page-content="historico"] .chart-y-labels,
+.page[data-page-content="historico"] .chart-axis-time {
+  font-size: 10.5px;
+}
+
+.page[data-page-content="historico"] .history-bottom {
+  grid-template-columns: 1fr 1.35fr;
+}
+
+.page[data-page-content="historico"] .pump-runtime-card {
+  min-height: 430px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-chart {
+  min-height: 310px;
+  margin-top: 16px;
+  grid-template-columns: 44px minmax(0, 1fr);
+  padding-bottom: 30px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-axis {
+  font-size: 10.5px;
+  padding-right: 10px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-axis small {
+  font-size: 10.5px;
+  left: -20px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-groups {
+  gap: 10px;
+  padding-inline: 10px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-bars {
+  gap: 4px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-bar {
+  width: min(18px, 23%);
+}
+
+.page[data-page-content="historico"] .pump-runtime-day time {
+  font-size: 10.5px;
+  padding-top: 9px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend {
+  gap: 12px 22px;
+  margin-top: 16px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend span {
+  font-size: 11.5px;
+  grid-template-columns: 11px auto;
+  column-gap: 7px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend i {
+  width: 10px;
+  height: 10px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend strong {
+  font-size: 11.5px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend small {
+  font-size: 9.5px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-note {
+  font-size: 11px;
+  margin-top: 12px;
+}
+
+.page[data-page-content="historico"] .history-table {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="historico"] .history-table th,
+.page[data-page-content="historico"] .history-table td {
+  padding: 11px 12px;
+}
+
+.page[data-page-content="historico"] .text-button {
+  font-size: 12.5px;
+}
+
+@media (max-width: 900px) {
+  .header__content { min-height: 82px; }
+  .brand__logo { width: 50px; height: 50px; }
+  .brand__text strong { font-size: 26px; }
+  .user-avatar { width: 42px; height: 42px; }
+  .page[data-page-content="historico"] .history-bottom { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  .brand__logo { width: 42px; height: 42px; }
+  .brand__text strong { font-size: 22px; }
+}
+
+
+/* =========================================================
+   HISTÓRICO v6 — tipografia maior + sino padronizado
+   ========================================================= */
+/* O sino usa o mesmo tamanho em todas as páginas, inclusive Alertas. */
+.header-bell-icon {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.notification-button {
+  width: 50px;
+  height: 50px;
+}
+
+/* Tipografia geral da tela de Histórico: mais legível em 1440 px. */
+.page[data-page-content="historico"] .filter-group label,
+.page[data-page-content="historico"] .label-like {
+  font-size: 15px;
+}
+
+.page[data-page-content="historico"] .date-range input,
+.page[data-page-content="historico"] .quick-filters button,
+.page[data-page-content="historico"] .apply-button {
+  font-size: 15px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card small {
+  font-size: 15.5px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card strong {
+  font-size: 30px;
+}
+
+.page[data-page-content="historico"] .history-summary .summary-card p {
+  font-size: 13.5px;
+}
+
+.page[data-page-content="historico"] .history-chart-toolbar strong {
+  font-size: 17px;
+}
+
+.page[data-page-content="historico"] .history-chart-toolbar p,
+.page[data-page-content="historico"] .chart-panel__subtitle {
+  font-size: 13.5px;
+}
+
+.page[data-page-content="historico"] .history-level-card h2,
+.page[data-page-content="historico"] .pump-runtime-card h2,
+.page[data-page-content="historico"] .history-table-card h2 {
+  font-size: 18px;
+}
+
+.page[data-page-content="historico"] .chart-y-labels,
+.page[data-page-content="historico"] .chart-axis-time {
+  font-size: 12px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-axis {
+  font-size: 12px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-axis small {
+  font-size: 12px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-day time {
+  font-size: 12px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend span {
+  font-size: 13px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend strong {
+  font-size: 13px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend small {
+  font-size: 11px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-note {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="historico"] .history-table {
+  font-size: 14px;
+}
+
+.page[data-page-content="historico"] .history-table th,
+.page[data-page-content="historico"] .history-table td {
+  padding: 12px 13px;
+}
+
+.page[data-page-content="historico"] .text-button {
+  font-size: 14px;
+}
+
+/* Pequeno reforço na navegação para combinar com a nova escala de leitura. */
+.page[data-page-content="historico"] .chart-range-label,
+.page[data-page-content="historico"] .chart-history-controls button {
+  font-size: 12.5px;
+}
+
+/* =========================================================
+   Ajuste v7 — controles de navegação do histórico
+   ========================================================= */
+.page[data-page-content="historico"] .chart-history-controls {
+  gap: 10px;
+}
+
+.page[data-page-content="historico"] .chart-nav-button {
+  min-width: 46px;
+  height: 42px;
+  border: 1.5px solid #b8cadc;
+  border-radius: 8px;
+  background: #f8fbff;
+  color: #234f7b;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 2px 5px rgba(33, 78, 120, .06);
+}
+
+.page[data-page-content="historico"] .chart-live-button {
+  min-height: 42px;
+  padding-inline: 16px;
+  border: 1.5px solid #b8cadc;
+  border-radius: 8px;
+  background: #f8fbff;
+  color: #126fcb;
+  font-size: 13.5px;
+  font-weight: 900;
+  box-shadow: 0 2px 5px rgba(33, 78, 120, .06);
+}
+
+.page[data-page-content="historico"] .chart-range-label {
+  color: #55728f;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.page[data-page-content="historico"] .chart-nav-button:hover:not(:disabled),
+.page[data-page-content="historico"] .chart-live-button:hover:not(:disabled) {
+  border-color: #78aee2;
+  background: #eef6ff;
+  color: #0f5ea8;
+}
+
+/* =========================================================
+   Ajuste v8 — setas mais grossas e legíveis no histórico
+   ========================================================= */
+.page[data-page-content="historico"] .chart-nav-button {
+  position: relative;
+  font-size: 0; /* substitui o caractere fino por uma seta desenhada em CSS */
+  color: #173f67;
+}
+
+.page[data-page-content="historico"] .chart-nav-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.page[data-page-content="historico"] .chart-nav-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-top: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+
+.page[data-page-content="historico"] .chart-nav-button[data-history-chart-prev]::after {
+  left: calc(50% - 8px);
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+.page[data-page-content="historico"] .chart-nav-button[data-history-chart-next]::after {
+  right: calc(50% - 8px);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.page[data-page-content="historico"] .chart-nav-button:hover:not(:disabled) {
+  color: #0d5da8;
+}
+
+
+/* Ajuste v9 — legenda e nota do gráfico de atividade das bombas */
+.page[data-page-content="historico"] .pump-runtime-legend span {
+  font-size: 15px;
+  column-gap: 8px;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend strong {
+  font-size: 15px;
+  line-height: 1.05;
+}
+
+.page[data-page-content="historico"] .pump-runtime-legend small {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.page[data-page-content="historico"] .pump-runtime-note {
+  font-size: 14px;
+  margin-top: 14px;
+}
+
+
+/* =========================================================
+   AJUSTE v10 — CONTROLE
+   Refinamento visual da tela de Controle com base no protótipo.
+   Mantém o cabeçalho/rodapé padronizados das demais páginas.
+   ========================================================= */
+.page[data-page-content="controle"] .summary-grid {
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.page[data-page-content="controle"] .summary-card {
+  min-height: 108px;
+  padding: 18px 20px;
+  gap: 14px;
+}
+
+.page[data-page-content="controle"] .summary-card small {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.page[data-page-content="controle"] .summary-card strong {
+  font-size: 23px;
+  margin-top: 3px;
+}
+
+.page[data-page-content="controle"] .summary-card p {
+  font-size: 11.5px;
+  margin-top: 5px;
+}
+
+.page[data-page-content="controle"] .summary-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.page[data-page-content="controle"] .summary-icon--art {
+  background: transparent;
+  width: 50px;
+  height: 50px;
+}
+
+.page[data-page-content="controle"] .summary-icon--art .summary-icon__image {
+  width: 50px;
+  height: 50px;
+}
+
+.page[data-page-content="controle"] .summary-icon .icon,
+.page[data-page-content="controle"] .control-summary-vector .icon,
+.page[data-page-content="controle"] .control-title-icon .icon,
+.page[data-page-content="controle"] .mode-card__icon .icon {
+  width: 25px;
+  height: 25px;
+}
+
+.page[data-page-content="controle"] .control-grid {
+  grid-template-columns: minmax(0, 2.15fr) minmax(300px, .92fr);
+  gap: 18px;
+}
+
+.page[data-page-content="controle"] .control-main,
+.page[data-page-content="controle"] .control-side {
+  gap: 18px;
+}
+
+.page[data-page-content="controle"] .system-control-panel,
+.page[data-page-content="controle"] .pump-control-panel,
+.page[data-page-content="controle"] .commands-panel,
+.page[data-page-content="controle"] .messages-panel {
+  border-color: #dbe7f1;
+  box-shadow: 0 7px 20px rgba(29, 78, 122, .075);
+}
+
+.page[data-page-content="controle"] .panel-title-row {
+  margin-bottom: 15px;
+}
+
+.page[data-page-content="controle"] .panel-title-row h2 {
+  font-size: 17px;
+}
+
+.page[data-page-content="controle"] .panel-title-row p {
+  font-size: 11.5px;
+}
+
+.page[data-page-content="controle"] .system-control-layout {
+  grid-template-columns: minmax(0, 1.55fr) minmax(220px, .78fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.page[data-page-content="controle"] .mode-selector {
+  gap: 12px;
+}
+
+.page[data-page-content="controle"] .mode-card {
+  min-height: 124px;
+  padding: 15px 14px;
+  gap: 11px;
+  border-radius: 9px;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.page[data-page-content="controle"] .mode-card:hover {
+  border-color: #a8ccef;
+  transform: translateY(-1px);
+}
+
+.page[data-page-content="controle"] .mode-card.is-selected {
+  background: #eef6ff;
+  border-color: #2f86ee;
+  box-shadow: 0 0 0 1px #2f86ee, 0 5px 14px rgba(47, 134, 238, .08);
+}
+
+.page[data-page-content="controle"] .mode-card strong {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.page[data-page-content="controle"] .mode-card small {
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.page[data-page-content="controle"] .mode-card__icon {
+  width: 44px;
+  height: 44px;
+}
+
+.page[data-page-content="controle"] .radio-dot {
+  width: 19px;
+  height: 19px;
+  border-color: #8ba5bf;
+}
+
+.page[data-page-content="controle"] .system-actions {
+  gap: 10px;
+}
+
+.page[data-page-content="controle"] .primary-action {
+  min-height: 59px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+}
+
+.page[data-page-content="controle"] .primary-action:hover {
+  transform: translateY(-1px);
+  filter: brightness(.97);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .09);
+}
+
+.page[data-page-content="controle"] .primary-action .icon {
+  width: 19px;
+  height: 19px;
+}
+
+.page[data-page-content="controle"] .primary-action strong {
+  font-size: 14px;
+}
+
+.page[data-page-content="controle"] .primary-action small {
+  font-size: 9.5px;
+  margin-top: 1px;
+}
+
+.page[data-page-content="controle"] .pump-control-panel {
+  padding-bottom: 12px;
+}
+
+.page[data-page-content="controle"] .control-table {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="controle"] .control-table th {
+  padding: 11px 12px;
+  font-size: 12px;
+  background: #f3f7fb;
+  border-bottom: 1px solid #dce7f0;
+}
+
+.page[data-page-content="controle"] .control-table td {
+  padding: 10px 12px;
+}
+
+.page[data-page-content="controle"] .control-table tbody tr {
+  transition: background .15s ease;
+}
+
+.page[data-page-content="controle"] .control-table tbody tr:hover {
+  background: #f9fbfd;
+}
+
+.page[data-page-content="controle"] .pump-function strong {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="controle"] .pump-function small {
+  margin-top: 2px;
+  font-size: 10px;
+}
+
+.page[data-page-content="controle"] .control-state-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.page[data-page-content="controle"] .control-state-wrap .status-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.page[data-page-content="controle"] .pill {
+  min-height: 25px;
+  padding: 3px 9px;
+  font-size: 10.5px;
+}
+
+.page[data-page-content="controle"] .switch {
+  width: 42px;
+  height: 23px;
+}
+
+.page[data-page-content="controle"] .commands-panel {
+  min-height: 244px;
+}
+
+.page[data-page-content="controle"] .commands-panel .panel-title-row {
+  margin-bottom: 13px;
+}
+
+.page[data-page-content="controle"] .timeline-list {
+  gap: 12px;
+}
+
+.page[data-page-content="controle"] .timeline-item {
+  grid-template-columns: 11px 1fr auto;
+  gap: 9px;
+  font-size: 10.5px;
+}
+
+.page[data-page-content="controle"] .timeline-item strong {
+  font-size: 11.5px;
+  line-height: 1.25;
+}
+
+.page[data-page-content="controle"] .timeline-item small,
+.page[data-page-content="controle"] .timeline-item time {
+  font-size: 9.5px;
+}
+
+.page[data-page-content="controle"] .timeline-item__dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 4px;
+}
+
+.page[data-page-content="controle"] .messages-panel {
+  min-height: 176px;
+}
+
+.page[data-page-content="controle"] .message {
+  padding: 15px 16px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+}
+
+.page[data-page-content="controle"] .message--success {
+  border-color: #bfead0;
+}
+
+.page[data-page-content="controle"] .message--info {
+  border-color: #c8e8fb;
+}
+
+.page[data-page-content="controle"] .message--warning {
+  border-color: #f3d5ae;
+}
+
+.page[data-page-content="controle"] .message strong {
+  font-size: 13px;
+}
+
+.page[data-page-content="controle"] .message small {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.page[data-page-content="controle"] .text-button {
+  font-size: 11px;
+  padding: 7px 12px;
+}
+
+@media (max-width: 1180px) {
+  .page[data-page-content="controle"] .control-grid {
+    grid-template-columns: 1fr;
+  }
+  .page[data-page-content="controle"] .control-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .page[data-page-content="controle"] .control-side,
+  .page[data-page-content="controle"] .system-control-layout,
+  .page[data-page-content="controle"] .mode-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v11 — Controle e Alertas
+   Correções solicitadas: ícones, fontes e legibilidade.
+   ========================================================= */
+.page[data-page-content="controle"] .summary-card {
+  min-height: 116px;
+  padding: 20px 22px;
+  gap: 16px;
+}
+.page[data-page-content="controle"] .summary-card small {
+  font-size: 14px;
+}
+.page[data-page-content="controle"] .summary-card strong {
+  font-size: 24px;
+}
+.page[data-page-content="controle"] .summary-card p {
+  font-size: 12.5px;
+}
+.page[data-page-content="controle"] .summary-icon {
+  width: 52px;
+  height: 52px;
+}
+.page[data-page-content="controle"] .summary-icon .icon,
+.page[data-page-content="controle"] .control-summary-vector .icon,
+.page[data-page-content="controle"] .control-title-icon .icon,
+.page[data-page-content="controle"] .mode-card__icon .icon {
+  width: 28px;
+  height: 28px;
+}
+.page[data-page-content="controle"] .panel-title-row h2 {
+  font-size: 18px;
+}
+.page[data-page-content="controle"] .panel-title-row p {
+  font-size: 12.5px;
+}
+.page[data-page-content="controle"] .mode-card {
+  min-height: 132px;
+  padding: 16px 16px;
+}
+.page[data-page-content="controle"] .mode-card strong {
+  font-size: 16px;
+}
+.page[data-page-content="controle"] .mode-card small {
+  font-size: 12.5px;
+  line-height: 1.42;
+}
+.page[data-page-content="controle"] .mode-card__icon {
+  width: 46px;
+  height: 46px;
+}
+.page[data-page-content="controle"] .primary-action {
+  min-height: 66px;
+  padding: 12px 18px;
+  gap: 12px;
+}
+.page[data-page-content="controle"] .primary-action .icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+.page[data-page-content="controle"] .primary-action strong {
+  font-size: 15px;
+}
+.page[data-page-content="controle"] .primary-action small {
+  font-size: 11px;
+}
+.page[data-page-content="controle"] .control-table {
+  font-size: 13.5px;
+}
+.page[data-page-content="controle"] .control-table th {
+  font-size: 12.5px;
+}
+.page[data-page-content="controle"] .pump-function strong {
+  font-size: 13.5px;
+}
+.page[data-page-content="controle"] .pump-function small {
+  font-size: 11.5px;
+}
+.page[data-page-content="controle"] .pill {
+  font-size: 11.5px;
+}
+.page[data-page-content="controle"] .commands-panel {
+  min-height: 258px;
+}
+.page[data-page-content="controle"] .timeline-item {
+  grid-template-columns: 12px 1fr auto;
+  gap: 10px;
+  font-size: 12px;
+}
+.page[data-page-content="controle"] .timeline-item strong {
+  font-size: 13.5px;
+}
+.page[data-page-content="controle"] .timeline-item small,
+.page[data-page-content="controle"] .timeline-item time {
+  font-size: 11.5px;
+}
+.page[data-page-content="controle"] .timeline-item__dot {
+  width: 8px;
+  height: 8px;
+}
+.page[data-page-content="controle"] .message strong {
+  font-size: 14px;
+}
+.page[data-page-content="controle"] .message small {
+  font-size: 12px;
+}
+.page[data-page-content="controle"] .text-button {
+  font-size: 12px;
+}
+
+/* Alertas com tipografia mais legível e padronizada. */
+.page[data-page-content="alertas"] .summary-card small {
+  font-size: 13px;
+}
+.page[data-page-content="alertas"] .summary-card strong {
+  font-size: 20px;
+}
+.page[data-page-content="alertas"] .summary-card strong.text-blue {
+  font-size: 36px;
+}
+.page[data-page-content="alertas"] .summary-card p {
+  font-size: 13px;
+}
+.page[data-page-content="alertas"] .alert-filters button,
+.page[data-page-content="alertas"] .text-button,
+.page[data-page-content="alertas"] .button {
+  font-size: 13px;
+}
+.page[data-page-content="alertas"] .alert-item__copy strong {
+  font-size: 15px;
+}
+.page[data-page-content="alertas"] .alert-item__copy small,
+.page[data-page-content="alertas"] .alert-meta {
+  font-size: 12.5px;
+}
+.page[data-page-content="alertas"] .alert-status,
+.page[data-page-content="alertas"] .alert-severity {
+  font-size: 12px;
+}
+.page[data-page-content="alertas"] .alert-detail__title h2 {
+  font-size: 19px;
+}
+.page[data-page-content="alertas"] .alert-detail__title p {
+  font-size: 13px;
+}
+.page[data-page-content="alertas"] .alert-detail__critical strong {
+  font-size: 14px;
+}
+.page[data-page-content="alertas"] .alert-detail__critical p {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.page[data-page-content="alertas"] .detail-list dt {
+  font-size: 13.5px;
+}
+.page[data-page-content="alertas"] .detail-list dd {
+  font-size: 14px;
+}
+.page[data-page-content="alertas"] .alert-observations h3 {
+  font-size: 14px;
+}
+.page[data-page-content="alertas"] .alert-observations ul {
+  font-size: 12.5px;
+}
+.page[data-page-content="alertas"] .button {
+  min-height: 46px;
+  padding-inline: 16px;
+}
+
+
+/* =========================================================
+   AJUSTE v14 — ÍCONES DE MODO
+   Evita troca de src no resumo e usa os mesmos assets nos cards.
+   ========================================================= */
+.page[data-page-content="controle"] .mode-summary-icon {
+  position: relative;
+  overflow: visible;
+}
+
+.page[data-page-content="controle"] .mode-summary-icon .summary-icon__image {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.page[data-page-content="controle"] .mode-summary-icon .is-hidden {
+  display: none;
+}
+
+.page[data-page-content="controle"] .mode-card__icon.summary-icon--art {
+  width: 46px;
+  height: 46px;
+  background: transparent;
+  overflow: visible;
+}
+
+.page[data-page-content="controle"] .mode-card__icon.summary-icon--art .summary-icon__image {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   AJUSTE v16 — Botões de ação e relógio do painel de controle
+   - ícones maiores e mais à esquerda nos botões
+   - relógio igual ao da página de alertas
+   ========================================================= */
+.page[data-page-content="controle"] .system-actions {
+  gap: 12px;
+}
+
+.page[data-page-content="controle"] .primary-action {
+  min-height: 72px;
+  padding: 14px 20px 14px 24px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+}
+
+.page[data-page-content="controle"] .primary-action .icon {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+}
+
+.page[data-page-content="controle"] .primary-action strong {
+  font-size: 15.5px;
+}
+
+.page[data-page-content="controle"] .primary-action small {
+  font-size: 11.5px;
+}
+
+.page[data-page-content="controle"] .control-clock-icon {
+  width: 54px;
+  height: 54px;
+  background: transparent !important;
+  color: #60758c;
+}
+
+.page[data-page-content="controle"] .control-clock-svg {
+  width: 46px;
+  height: 46px;
+  color: #60758c;
+}
+
+
+/* =========================================================
+   AJUSTE v17 — Ícones proporcionais de modo automático/manual
+   - troca PNGs por SVGs flat para manter proporção consistente
+   - mão redesenhada em estilo chapado, sem profundidade
+   ========================================================= */
+.page[data-page-content="controle"] .mode-summary-icon {
+  position: relative;
+  overflow: visible;
+}
+
+.page[data-page-content="controle"] .mode-summary-svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  color: #2f86ee;
+}
+
+.page[data-page-content="controle"] .mode-summary-svg--robot {
+  width: 32px;
+  height: 32px;
+}
+
+.page[data-page-content="controle"] .mode-summary-svg--hand {
+  width: 30px;
+  height: 30px;
+}
+
+.page[data-page-content="controle"] .mode-card__icon.summary-icon--art {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page[data-page-content="controle"] .mode-card-icon-svg {
+  color: #2f86ee;
+  display: block;
+}
+
+.page[data-page-content="controle"] .mode-card-icon-svg--robot {
+  width: 28px;
+  height: 28px;
+}
+
+.page[data-page-content="controle"] .mode-card-icon-svg--hand {
+  width: 27px;
+  height: 27px;
+}
+
+/* =========================================================
+   AJUSTE v18 — Tipografia maior nas áreas solicitadas
+   - Últimos comandos
+   - Mensagens e segurança
+   - Controle das bombas
+   ========================================================= */
+.page[data-page-content="controle"] .pump-control-panel .panel-title-row h2,
+.page[data-page-content="controle"] .commands-panel .panel-title-row h2,
+.page[data-page-content="controle"] .messages-panel .panel-title-row h2 {
+  font-size: 18px;
+}
+
+.page[data-page-content="controle"] .pump-control-panel .panel-title-row p,
+.page[data-page-content="controle"] .commands-panel .panel-title-row p,
+.page[data-page-content="controle"] .messages-panel .panel-title-row p {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.page[data-page-content="controle"] .control-table {
+  font-size: 14px;
+}
+
+.page[data-page-content="controle"] .control-table th {
+  font-size: 14px;
+}
+
+.page[data-page-content="controle"] .control-table td {
+  font-size: 13.5px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.page[data-page-content="controle"] .control-table td:first-child {
+  font-size: 14px;
+}
+
+.page[data-page-content="controle"] .pump-function strong {
+  font-size: 14.5px;
+}
+
+.page[data-page-content="controle"] .pump-function small {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.page[data-page-content="controle"] .pill {
+  font-size: 12.5px;
+  min-height: 30px;
+  padding: 5px 11px;
+}
+
+.page[data-page-content="controle"] .timeline-item {
+  font-size: 13px;
+  gap: 11px;
+}
+
+.page[data-page-content="controle"] .timeline-item strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.page[data-page-content="controle"] .timeline-item small,
+.page[data-page-content="controle"] .timeline-item time {
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.page[data-page-content="controle"] .timeline-item__dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+}
+
+.page[data-page-content="controle"] .text-button {
+  font-size: 13px;
+  padding: 8px 14px;
+}
+
+.page[data-page-content="controle"] .message strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.page[data-page-content="controle"] .message small {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   AJUSTE v19 — MONITORAMENTO / TIPOGRAFIA
+   Aumenta o tamanho real das fontes sem alterar o peso (font-weight).
+   ========================================================= */
+.page[data-page-content="monitoramento"] .summary-card small {
+  font-size: 15px;
+}
+
+.page[data-page-content="monitoramento"] .summary-card strong {
+  font-size: 27px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading h2 {
+  font-size: 20px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading p {
+  font-size: 14px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__volume {
+  font-size: 22px !important;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__details {
+  font-size: 14px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__details dt,
+.page[data-page-content="monitoramento"] .reservoir__details dd {
+  font-size: 14px;
+}
+
+.page[data-page-content="monitoramento"] .chart-panel h2,
+.page[data-page-content="monitoramento"] .status-panel h2,
+.page[data-page-content="monitoramento"] .readings-panel h2 {
+  font-size: 19px;
+}
+
+.page[data-page-content="monitoramento"] .chart-panel__subtitle {
+  font-size: 13px;
+}
+
+.page[data-page-content="monitoramento"] .chart-legend {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="monitoramento"] .chart-range-label {
+  font-size: 12.5px;
+  min-width: 156px;
+}
+
+.page[data-page-content="monitoramento"] .chart-nav-button,
+.page[data-page-content="monitoramento"] .chart-live-button {
+  font-size: 13px;
+}
+
+.page[data-page-content="monitoramento"] .chart-y-labels {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.page[data-page-content="monitoramento"] .chart-axis-time {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.page[data-page-content="monitoramento"] .status-row small {
+  font-size: 13px;
+}
+
+.page[data-page-content="monitoramento"] .status-row strong {
+  font-size: 17px;
+}
+
+.page[data-page-content="monitoramento"] .status-row p {
+  font-size: 12.5px;
+}
+
+.page[data-page-content="monitoramento"] .info-note {
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.page[data-page-content="monitoramento"] .reading-list li {
+  font-size: 13.5px;
+  gap: 14px;
+}
+
+.page[data-page-content="monitoramento"] .reading-list strong,
+.page[data-page-content="monitoramento"] .reading-list span,
+.page[data-page-content="monitoramento"] .reading-list time {
+  font-size: 13.5px;
+}
+
+.page[data-page-content="monitoramento"] .readings-panel .text-button {
+  font-size: 13.5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.page[data-page-content="monitoramento"] .readings-panel .text-button__label {
+  display: inline-block;
+  max-width: 170px;
+  text-align: center;
+  line-height: 1.18;
+}
+
+.page[data-page-content="monitoramento"] .readings-panel .text-button__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 1000;
+  -webkit-text-stroke: 0.6px currentColor;
+  transform: translateY(-1px);
+}
+
+.page[data-page-content="monitoramento"] .chart-empty {
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .page[data-page-content="monitoramento"] .summary-card small { font-size: 14px; }
+  .page[data-page-content="monitoramento"] .summary-card strong { font-size: 24px; }
+  .page[data-page-content="monitoramento"] .reservoir__heading h2 { font-size: 18px; }
+  .page[data-page-content="monitoramento"] .reservoir__heading p { font-size: 13px; }
+  .page[data-page-content="monitoramento"] .reservoir__details,
+  .page[data-page-content="monitoramento"] .reservoir__details dt,
+  .page[data-page-content="monitoramento"] .reservoir__details dd { font-size: 13px; }
+}
+
+/* =========================================================
+   AJUSTE v20 — MONITORAMENTO / ALINHAMENTO DOS TÍTULOS
+   Corrige o desalinhamento visual entre os cabeçalhos dos dois reservatórios.
+   ========================================================= */
+.page[data-page-content="monitoramento"] .reservoir-grid {
+  align-items: flex-start;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading {
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 46px;
+  margin-bottom: 12px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 38px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading h2 {
+  margin: 0 0 3px;
+  line-height: 1.12;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading p {
+  margin: 0;
+  line-height: 1.15;
+}
+
+.page[data-page-content="monitoramento"] [data-reservoir-card="principal"] .reservoir__heading .summary-icon__image,
+.page[data-page-content="monitoramento"] [data-reservoir-card="reserva"] .reservoir__heading .summary-icon__image {
+  display: block;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   AJUSTE v21 — MONITORAMENTO / TÍTULOS + ÍCONES DOS RESERVATÓRIOS
+   Corrige o visual estranho dos cabeçalhos e aumenta os ícones.
+   ========================================================= */
+.page[data-page-content="monitoramento"] .reservoir__heading {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  margin-bottom: 14px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading .summary-icon.small {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading .summary-icon.small .summary-icon__image {
+  width: 30px;
+  height: 30px;
+}
+
+/* O ícone azul possui mais área transparente e por isso parecia menor. */
+.page[data-page-content="monitoramento"] [data-reservoir-card="principal"] .reservoir__heading .summary-icon.small .summary-icon__image {
+  width: 34px;
+  height: 34px;
+}
+
+.page[data-page-content="monitoramento"] [data-reservoir-card="reserva"] .reservoir__heading .summary-icon.small .summary-icon__image {
+  width: 30px;
+  height: 30px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading h2 {
+  margin: 0 0 4px;
+  line-height: 1.08;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading p {
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* =========================================================
+   AJUSTE v22 — MONITORAMENTO / CABEÇALHOS CENTRALIZADOS
+   Centraliza o conjunto ícone + título + subtítulo sobre cada
+   reservatório, mantendo ambos alinhados com os círculos.
+   ========================================================= */
+.page[data-page-content="monitoramento"] .reservoir__heading {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading > div {
+  flex: 0 1 auto;
+}
+
+
+/* =========================================================
+   AJUSTE v23 — MONITORAMENTO / TÍTULOS ALINHADOS COM A CAIXA
+   Deixa o bloco de cabeçalho com a mesma largura visual da
+   caixa de informações do reservatório que fica abaixo.
+   ========================================================= */
+.page[data-page-content="monitoramento"] .reservoir {
+  align-items: center;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading,
+.page[data-page-content="monitoramento"] .reservoir__volume,
+.page[data-page-content="monitoramento"] .reservoir__details {
+  width: min(100%, 300px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+}
+
+.page[data-page-content="monitoramento"] .reservoir__heading > div {
+  flex: 1 1 auto;
+}
+
+
+/* =========================================================
+   AJUSTE v24 — MONITORAMENTO / RELÓGIO DO CARD ATUALIZAÇÃO
+   Mesmo estilo visual do relógio usado em Última ocorrência:
+   círculo azul-acinzentado preenchido com ponteiros brancos.
+   ========================================================= */
+.page[data-page-content="monitoramento"] .monitor-update-clock {
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  color: #60758c;
+}
+
+.page[data-page-content="monitoramento"] .monitor-update-clock__svg {
+  width: 46px;
+  height: 46px;
+  display: block;
+  overflow: visible;
+}
+
+.page[data-page-content="monitoramento"] .monitor-update-clock__svg circle {
+  fill: #60758c;
+}
+
+.page[data-page-content="monitoramento"] .monitor-update-clock__svg path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================================================
+   AJUSTE v28 — INÍCIO / PADRONIZAÇÃO VISUAL DOS ÍCONES
+   Compensa as diferenças de área útil entre os PNGs para que
+   todos tenham aproximadamente o mesmo peso visual nos cards.
+   ========================================================= */
+.page[data-page-content="inicio"] .summary-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+}
+
+.page[data-page-content="inicio"] .summary-icon__image {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Ajustes ópticos por arquivo: alguns PNGs possuem mais margem interna. */
+.page[data-page-content="inicio"] img[src$="icon-tank-primary-blue.png"] {
+  width: 34px;
+  height: 34px;
+}
+
+.page[data-page-content="inicio"] img[src$="icon-tank-reserve-orange.png"] {
+  width: 31px;
+  height: 31px;
+}
+
+.page[data-page-content="inicio"] img[src$="icon-wifi-green.png"],
+.page[data-page-content="inicio"] img[src$="icon-pump-purple.png"],
+.page[data-page-content="inicio"] img[src$="icon-building-purple.png"],
+.page[data-page-content="inicio"] img[src$="icon-gear-blue.png"] {
+  width: 30px;
+  height: 30px;
+}
+
+.page[data-page-content="inicio"] img[src$="icon-check-green.png"],
+.page[data-page-content="inicio"] img[src$="icon-building-green.png"],
+.page[data-page-content="inicio"] img[src$="icon-wave-blue.png"],
+.page[data-page-content="inicio"] img[src$="icon-drop-green.png"] {
+  width: 29px;
+  height: 29px;
+}
+
+/* =========================================================
+   AJUSTE v29 — INÍCIO / RESERVATÓRIOS NO PADRÃO MONITORAMENTO
+   Alinha ícone + título + subtítulo à mesma largura da caixa
+   de informações inferior, como na página Monitoramento.
+   ========================================================= */
+.page[data-page-content="inicio"] .reservoir {
+  align-items: center;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading,
+.page[data-page-content="inicio"] .reservoir__volume,
+.page[data-page-content="inicio"] .reservoir__details {
+  width: min(100%, 300px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading .summary-icon.small {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 42px;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading h2 {
+  margin: 0 0 4px;
+  line-height: 1.08;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading p {
+  margin: 0;
+  line-height: 1.1;
+}
+
+.page[data-page-content="inicio"] [data-reservoir-card="principal"] .reservoir__heading .summary-icon__image {
+  width: 34px;
+  height: 34px;
+}
+
+.page[data-page-content="inicio"] [data-reservoir-card="reserva"] .reservoir__heading .summary-icon__image {
+  width: 30px;
+  height: 30px;
+}
+
+
+/* =========================================================
+   AJUSTE v30 — INÍCIO / ÍCONE STATUS + RESERVATÓRIOS MAIORES
+   - Remove o "fundo dentro do fundo" do check verde.
+   - Aumenta um pouco os gráficos de nível e mantém tudo centralizado.
+   ========================================================= */
+.page[data-page-content="inicio"] .summary-icon--plain-check .icon {
+  width: 24px;
+  height: 24px;
+  color: #17b85a;
+  display: block;
+}
+
+.page[data-page-content="inicio"] .water-gauge {
+  --size: 255px;
+  margin: 14px auto 12px;
+}
+
+.page[data-page-content="inicio"] .reservoir__heading,
+.page[data-page-content="inicio"] .reservoir__volume,
+.page[data-page-content="inicio"] .reservoir__details {
+  width: min(100%, 320px);
+}
+
+.page[data-page-content="inicio"] .reservoir-grid {
+  align-items: start;
+}
+
+@media (max-width: 1180px) {
+  .page[data-page-content="inicio"] .water-gauge {
+    --size: 242px;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__heading,
+  .page[data-page-content="inicio"] .reservoir__volume,
+  .page[data-page-content="inicio"] .reservoir__details {
+    width: min(100%, 306px);
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v31 — NAVEGAÇÃO SUPERIOR MAIS PROFISSIONAL
+   - Padroniza altura, espaçamento e tipografia dos botões.
+   - Corrige o peso visual dos ícones PNG da barra.
+   - Centraliza melhor cada ícone para evitar aspecto desnivelado.
+   ========================================================= */
+@media (min-width: 901px) {
+  .main-nav {
+    box-shadow: 0 3px 12px rgba(39, 87, 10, 0.14);
+  }
+
+  .nav__content {
+    min-height: 74px;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .nav-item {
+    min-height: 50px;
+    padding: 0 22px;
+    border-radius: 10px;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .nav-item:hover {
+    background: rgba(255,255,255,.10);
+    transform: translateY(-1px);
+  }
+
+  .nav-item.is-active {
+    background: #4a91df;
+    box-shadow: 0 8px 18px rgba(28, 80, 138, 0.20);
+  }
+
+  .nav-item__icon {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-icon-image {
+    display: block;
+    object-fit: contain;
+    max-width: none;
+    max-height: none;
+  }
+
+  .nav-item > span:last-child {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+.nav-icon-image[src$="nav-monitoramento-white.png"] {
+    width: 25px;
+    height: 25px;
+    transform: translate(0.2px, 1px);
+  }
+.nav-icon-image[src$="nav-historico-white.png"] {
+    width: 20px;
+    height: 20px;
+    transform: translate(0.5px, -1px);
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v32 — NAVBAR NO PADRÃO VISUAL DA REFERÊNCIA
+   Aproxima a navegação da imagem de referência enviada pelo usuário:
+   itens mais presentes, ícones maiores e peso visual equivalente.
+   ========================================================= */
+@media (min-width: 901px) {
+  .nav__content {
+    min-height: 78px;
+    justify-content: center;
+    gap: 18px;
+  }
+
+  .nav-item {
+    min-height: 54px;
+    padding: 0 25px;
+    border-radius: 9px;
+    gap: 11px;
+    font-size: 15.5px;
+    font-weight: 800;
+  }
+
+  .nav-item__icon {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+  }
+
+  /* Ícones calibrados pelo tamanho VISUAL do desenho, não pelo PNG inteiro. */
+.nav-icon-image[src$="nav-monitoramento-white.png"] {
+    width: 32px;
+    height: 32px;
+    transform: translate(0.2px, 1.3px);
+  }
+.nav-icon-image[src$="nav-historico-white.png"] {
+    width: 25px;
+    height: 25px;
+    transform: translate(0.5px, -0.7px);
+  }
+.nav-item.is-active {
+    background: #4a91df;
+    box-shadow: 0 7px 17px rgba(31, 82, 138, 0.20);
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v33 — BARRA VERDE FIEL À REFERÊNCIA
+   SOMENTE a navegação principal é afetada.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav {
+    box-shadow: 0 2px 8px rgba(40,80,10,.08);
+  }
+
+  body[data-page] .main-nav .nav__content {
+    min-height: 62px;
+    justify-content: flex-start;
+    gap: 18px;
+    padding-left: 12px;
+  }
+
+  body[data-page] .main-nav .nav-item {
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 8px;
+    gap: 9px;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    transform: none;
+  }
+
+  body[data-page] .main-nav .nav-item:hover {
+    background: rgba(255,255,255,.12);
+    transform: none;
+  }
+
+  body[data-page] .main-nav .nav-item.is-active {
+    background: #4a91df;
+    box-shadow: 0 5px 12px rgba(27,83,142,.16);
+  }
+
+  body[data-page] .main-nav .nav-item__icon {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 24px !important;
+    height: 24px !important;
+    max-width: 24px;
+    max-height: 24px;
+    object-fit: contain;
+    transform: none !important;
+  }
+
+  /* O gráfico de monitoramento é estreito por natureza; recebe 1px extra
+     para ficar com o mesmo peso óptico dos demais sem ultrapassá-los. */
+body[data-page] .main-nav .nav-item > span:last-child {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v34 — NAVBAR MAIOR, MANTENDO O MESMO LAYOUT
+   SOMENTE a barra verde é alterada.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav .nav__content {
+    min-height: 72px;
+    gap: 22px;
+    padding-left: 18px;
+  }
+
+  body[data-page] .main-nav .nav-item {
+    min-height: 50px;
+    padding: 0 20px;
+    gap: 10px;
+    font-size: 15.5px;
+    border-radius: 9px;
+  }
+
+  body[data-page] .main-nav .nav-item__icon {
+    width: 29px;
+    height: 29px;
+    flex: 0 0 29px;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px;
+    max-height: 28px;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v35 — NAVBAR BEM MAIOR
+   Pedido do usuário: aumentar bem somente a barra verde.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav {
+    box-shadow: 0 2px 8px rgba(40,80,10,.08);
+  }
+
+  body[data-page] .main-nav .nav__content {
+    min-height: 86px;
+    gap: 26px;
+    padding-left: 20px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  body[data-page] .main-nav .nav-item {
+    min-height: 58px;
+    padding: 0 24px;
+    gap: 12px;
+    font-size: 17px;
+    font-weight: 800;
+    border-radius: 10px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  body[data-page] .main-nav .nav-item.is-active {
+    box-shadow: 0 7px 16px rgba(27,83,142,.18);
+  }
+
+  body[data-page] .main-nav .nav-item__icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 33px !important;
+    height: 33px !important;
+    max-width: 33px;
+    max-height: 33px;
+    object-fit: contain;
+  }
+body[data-page] .main-nav .nav-item > span:last-child {
+    font-size: 17px;
+    line-height: 1;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v36 — ÍCONES DA NAV PADRONIZADOS
+   Substitui os PNGs por SVGs com o mesmo estilo visual,
+   deixando o relógio consistente com os demais.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav .nav-item__icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px;
+    max-height: 28px;
+    display: block;
+    object-fit: contain;
+    transform: none !important;
+  }
+
+  body[data-page] .main-nav .nav-item.is-active .nav-icon-image,
+  body[data-page] .main-nav .nav-item .nav-icon-image {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v39 — NAV / PNGS APROVADOS REALMENTE APLICADOS
+   Usa os cinco PNGs aprovados pelo usuário e padroniza sua
+   área visual sem alterar o restante da barra.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav .nav-item__icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transform: none !important;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v40 — NAV / AUMENTO FORTE DOS ÍCONES
+   Pedido do usuário: aumentar bem os ícones da barra verde,
+   sem mexer no restante do layout.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav .nav-item__icon {
+    width: 44px !important;
+    height: 44px !important;
+    flex: 0 0 44px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body[data-page] .main-nav .nav-icon-image {
+    width: 36px !important;
+    height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transform: none !important;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE v41 — NAV / ESCALA ÓPTICA REAL DOS ÍCONES
+   Medido pela área VISÍVEL dos PNGs, não apenas pelo canvas.
+   A casinha recebe menos escala; gráfico/engrenagem/relógio
+   recebem mais para ficarem com o mesmo peso visual.
+   ========================================================= */
+@media (min-width: 901px) {
+  body[data-page] .main-nav .nav-item__icon {
+    width: 62px !important;
+    height: 62px !important;
+    flex: 0 0 62px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Base maior. Os valores individuais abaixo compensam a área real do desenho. */
+  body[data-page] .main-nav .nav-icon-image {
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    transform: none !important;
+  }
+
+  body[data-page] .main-nav .nav-item[data-page="inicio"] .nav-icon-image {
+    width: 44px !important;
+    height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
+  }
+
+  body[data-page] .main-nav .nav-item[data-page="monitoramento"] .nav-icon-image {
+    width: 59px !important;
+    height: 59px !important;
+    max-width: 59px !important;
+    max-height: 59px !important;
+  }
+
+  body[data-page] .main-nav .nav-item[data-page="controle"] .nav-icon-image {
+    width: 56px !important;
+    height: 56px !important;
+    max-width: 56px !important;
+    max-height: 56px !important;
+  }
+
+  body[data-page] .main-nav .nav-item[data-page="historico"] .nav-icon-image {
+    width: 55px !important;
+    height: 55px !important;
+    max-width: 55px !important;
+    max-height: 55px !important;
+  }
+
+  body[data-page] .main-nav .nav-item[data-page="alertas"] .nav-icon-image {
+    width: 50px !important;
+    height: 50px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
+  }
+
+  /* Dá um pouco mais de respiro entre ícone e texto após o aumento. */
+  body[data-page] .main-nav .nav-item {
+    gap: 10px;
+  }
+}
+
+
+/* =========================================================
+   HEADER / PERFIL / NOTIFICAÇÕES — AJUSTE PROFISSIONAL FINAL
+   ========================================================= */
+.app-header {
+  position: relative;
+  z-index: 30;
+}
+
+.header__content {
+  min-height: 104px;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.header-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header__divider {
+  width: 1px;
+  height: 72px;
+  background: #dfe7ef;
+}
+
+.notification-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  color: var(--green-600);
+  transition: background .2s ease, transform .2s ease;
+}
+
+.notification-button:hover,
+.notification-button[aria-expanded="true"] {
+  background: #eef6e3;
+  transform: translateY(-1px);
+}
+
+.header-bell-icon {
+  width: 34px;
+  height: 34px;
+  color: var(--green-600);
+}
+
+.notification-dot {
+  position: absolute;
+  top: 10px;
+  right: 9px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--red-600);
+  border: 2px solid #fff;
+  display: block;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.75);
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--green-600);
+  font-weight: 800;
+}
+
+.user-menu:hover .user-avatar,
+.user-menu[aria-expanded="true"] .user-avatar {
+  background: #f7fbf0;
+}
+
+.user-avatar {
+  width: 54px;
+  height: 54px;
+  border: 3px solid var(--green-600);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--green-600);
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.user-avatar .icon {
+  width: 30px;
+  height: 30px;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.user-name {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--green-600);
+}
+
+.user-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-500);
+}
+
+.user-caret {
+  display: grid;
+  place-items: center;
+  color: var(--green-600);
+  margin-left: 2px;
+}
+
+.user-caret .icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+  transition: transform .2s ease;
+}
+
+.user-menu[aria-expanded="true"] .user-caret .icon {
+  transform: rotate(180deg);
+}
+
+.header-popover {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 360px;
+  background: #fff;
+  border: 1px solid #e4ecf3;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(16, 51, 89, 0.16);
+  padding: 16px;
+  z-index: 50;
+}
+
+.header-popover::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 26px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-top: 1px solid #e4ecf3;
+  border-left: 1px solid #e4ecf3;
+  transform: rotate(45deg);
+}
+
+.header-popover[hidden] {
+  display: none !important;
+}
+
+.header-popover__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.header-popover__header h3 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.15;
+  color: var(--text-900);
+}
+
+.header-popover__header p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-500);
+}
+
+.header-popover__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--blue-100);
+  color: var(--blue-700);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.notification-panel {
+  width: 390px;
+}
+
+.notification-list {
+  display: grid;
+  gap: 10px;
+}
+
+.notification-item {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 12px;
+  padding: 12px 12px 12px 10px;
+  border-radius: 14px;
+  background: #f8fbfe;
+  border: 1px solid #ebf2f8;
+}
+
+.notification-item__marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: var(--blue-600);
+  box-shadow: 0 0 0 6px rgba(47,134,238,.12);
+}
+
+.notification-item--warning .notification-item__marker {
+  background: var(--orange-500);
+  box-shadow: 0 0 0 6px rgba(255,122,26,.14);
+}
+
+.notification-item--success .notification-item__marker {
+  background: #1eb656;
+  box-shadow: 0 0 0 6px rgba(30,182,86,.12);
+}
+
+.notification-item__content strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-900);
+  font-size: 14px;
+}
+
+.notification-item__content p {
+  margin: 0;
+  color: var(--text-700);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.notification-item__content small {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-500);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.user-panel {
+  width: 345px;
+}
+
+.user-panel__top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.user-avatar--large {
+  width: 58px;
+  height: 58px;
+}
+
+.user-panel__top strong {
+  display: block;
+  font-size: 18px;
+  color: var(--text-900);
+}
+
+.user-panel__top p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--text-500);
+}
+
+.plan-card {
+  border: 1px solid #e8eef5;
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f5f9fd 100%);
+}
+
+.plan-card__chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #eef6e3;
+  color: var(--green-700);
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.plan-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.plan-card__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.plan-card__list span {
+  color: var(--text-500);
+}
+
+.plan-card__list strong {
+  color: var(--text-900);
+  text-align: right;
+}
+
+.plan-card__status {
+  color: #17a34a !important;
+}
+
+.user-panel__footer {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dropdown-link {
+  border: 0;
+  border-radius: 12px;
+  background: #f1f6fb;
+  color: var(--text-900);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  transition: background .2s ease, color .2s ease;
+}
+
+.dropdown-link:hover {
+  background: #e6eef7;
+}
+
+@media (max-width: 900px) {
+  .header__content {
+    min-height: 86px;
+  }
+
+  .header__divider,
+  .user-subtitle {
+    display: none;
+  }
+
+  .header-popover,
+  .notification-panel,
+  .user-panel {
+    width: min(92vw, 360px);
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .notification-button {
+    width: 46px;
+    height: 46px;
+    display: grid;
+  }
+
+  .header-bell-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .user-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .user-avatar .icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .user-name,
+  .user-caret {
+    display: none;
+  }
+
+  .header__actions {
+    gap: 10px;
+  }
+}
+
+
+/* =========================================================
+   HEADER / PERFIL — AJUSTE DE INTERAÇÃO E DESTAQUE
+   ========================================================= */
+.header-action--user .user-menu {
+  padding: 8px 12px;
+  margin-right: -12px;
+  border-radius: 14px;
+  transition: background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.header-action--user .user-menu:hover {
+  background: #f5faee;
+}
+
+.header-action--user .user-menu[aria-expanded="true"] {
+  background: #eef6e3;
+  box-shadow: inset 0 0 0 1px rgba(133,181,31,.22), 0 5px 14px rgba(72,111,11,.10);
+  transform: translateY(-1px);
+}
+
+.header-action--user .user-menu[aria-expanded="true"] .user-name {
+  color: var(--green-700);
+}
+
+.header-action--user .user-menu[aria-expanded="true"] .user-avatar {
+  background: #f8fceF;
+  box-shadow: 0 0 0 4px rgba(133,181,31,.10);
+}
+
+.header-action--user .user-caret .icon {
+  transition: transform .2s ease, color .2s ease;
+}
+
+.header-action--user .user-menu[aria-expanded="true"] .user-caret .icon {
+  transform: rotate(180deg);
+  color: var(--green-700);
+}
+
+.user-panel {
+  width: 390px;
+  padding: 20px;
+}
+
+.header-popover:not([hidden]) {
+  animation: header-popover-in .16s ease-out both;
+  transform-origin: top right;
+}
+
+@keyframes header-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-7px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.user-panel__top {
+  margin-bottom: 16px;
+}
+
+.plan-card {
+  padding: 16px;
+}
+
+.user-panel__footer {
+  margin-top: 16px;
+}
+
+.dropdown-link[data-action="logout"] {
+  min-width: 110px;
+  background: #ef3f4b;
+  color: #fff;
+  box-shadow: 0 5px 12px rgba(239,63,75,.18);
+}
+
+.dropdown-link[data-action="logout"]:hover {
+  background: #d93440;
+  color: #fff;
+}
+
+.dropdown-link[data-action="logout"]:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(239,63,75,.18);
+}
+
+@media (max-width: 640px) {
+  .user-panel {
+    width: min(92vw, 380px);
+    padding: 18px;
+  }
+}
+
+
+/* =========================================================
+   LOGO OFICIAL — AJUSTE FINAL
+   ========================================================= */
+.brand__logo {
+  width: 58px !important;
+  height: 58px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .brand__logo {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .brand__logo {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+
+/* Notificações já visualizadas: esconde o indicador vermelho do sino. */
+.notification-dot.is-read {
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE APP EXPERIENCE — AJUSTE PROFISSIONAL FINAL
+   Apenas telas mobile/tablet. Desktop permanece inalterado.
+   ========================================================= */
+@media (max-width: 900px) {
+  :root {
+    --mobile-header-h: 74px;
+    --mobile-side-pad: 14px;
+  }
+
+  body {
+    background: #f5f8fb;
+  }
+
+  body.nav-open {
+    overflow: hidden;
+  }
+
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e5edf4;
+    box-shadow: 0 4px 18px rgba(19,59,99,.06);
+  }
+
+  .header__content {
+    width: 100%;
+    min-height: var(--mobile-header-h);
+    padding: 0 var(--mobile-side-pad);
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-only#menuToggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    color: var(--green-600);
+    display: grid !important;
+    place-items: center;
+    background: #f8fbf4;
+    border: 1px solid #e5efda;
+  }
+
+  .mobile-only#menuToggle .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand {
+    justify-self: center;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .brand__logo {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .brand__text {
+    display: none !important;
+  }
+
+  .header__actions {
+    justify-self: end;
+    gap: 6px;
+  }
+
+  .header__divider,
+  .user-meta,
+  .user-caret {
+    display: none !important;
+  }
+
+  .notification-button {
+    width: 42px;
+    height: 42px;
+    display: grid !important;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .header-bell-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .notification-dot {
+    top: 7px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .header-action--user .user-menu {
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .user-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    border-width: 2.5px;
+  }
+
+  .user-avatar .icon {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  /* Drawer com aparência de menu de aplicativo */
+  .main-nav {
+    position: fixed !important;
+    inset: var(--mobile-header-h) auto 0 0 !important;
+    width: min(310px, 84vw) !important;
+    height: calc(100dvh - var(--mobile-header-h)) !important;
+    background: #fff !important;
+    color: var(--text-900) !important;
+    transform: translateX(-105%);
+    transition: transform .24s cubic-bezier(.2,.8,.2,1);
+    z-index: 70;
+    box-shadow: 18px 0 46px rgba(14,45,78,.20) !important;
+    border-top: 1px solid #edf2f6;
+  }
+
+  .main-nav.is-open {
+    transform: translateX(0);
+  }
+
+  body.nav-open::after {
+    content: "";
+    position: fixed;
+    inset: var(--mobile-header-h) 0 0 0;
+    background: rgba(15,42,70,.32);
+    backdrop-filter: blur(2px);
+    z-index: 65;
+  }
+
+  .main-nav .nav__content {
+    width: 100% !important;
+    height: 100%;
+    padding: 18px 14px 24px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+  }
+
+  .main-nav .nav-item {
+    width: 100%;
+    min-height: 54px !important;
+    padding: 0 14px !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    border-radius: 12px !important;
+    color: var(--text-700) !important;
+    font-size: 15px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .main-nav .nav-item.is-active {
+    color: #fff !important;
+    background: linear-gradient(135deg, #4697e8, #3383d7) !important;
+    box-shadow: 0 8px 18px rgba(47,134,238,.22) !important;
+  }
+
+  .main-nav .nav-item__icon {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
+  }
+
+  .main-nav .nav-icon-image {
+    width: 27px !important;
+    height: 27px !important;
+    max-width: 27px !important;
+    max-height: 27px !important;
+    filter: invert(30%) sepia(18%) saturate(1030%) hue-rotate(170deg) brightness(86%) contrast(88%);
+  }
+
+  .main-nav .nav-item.is-active .nav-icon-image {
+    filter: none;
+  }
+
+  /* Conteúdo com margens de app */
+  .app-main {
+    width: 100% !important;
+    padding: 14px var(--mobile-side-pad) 22px !important;
+  }
+
+  .page {
+    width: 100%;
+  }
+
+  .panel,
+  .summary-card {
+    border-radius: 16px;
+    border-color: #e5edf4;
+    box-shadow: 0 5px 16px rgba(31,78,125,.07);
+  }
+
+  .summary-grid {
+    margin-bottom: 14px;
+  }
+
+  .summary-grid--five,
+  .summary-grid--four,
+  .summary-grid--three {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .summary-card {
+    min-width: 0;
+    min-height: 88px;
+    padding: 12px !important;
+    gap: 10px;
+  }
+
+  .summary-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .summary-card small {
+    font-size: 11px;
+  }
+
+  .summary-card strong {
+    font-size: 19px;
+  }
+
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .summary-icon__image,
+  .summary-icon .icon {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  .dashboard-grid,
+  .monitor-grid,
+  .control-grid,
+  .alerts-grid,
+  .history-bottom,
+  .history-charts,
+  .monitor-lower,
+  .control-side {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .reservoirs-panel,
+  .monitor-reservoirs {
+    padding: 14px !important;
+  }
+
+  .reservoir-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .reservoir {
+    min-width: 0;
+  }
+
+  .reservoir__heading {
+    width: 100% !important;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .reservoir__heading h2 {
+    font-size: 13px !important;
+    line-height: 1.2;
+  }
+
+  .reservoir__heading p {
+    font-size: 10px !important;
+  }
+
+  .reservoir__heading .summary-icon.small {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px;
+  }
+
+  .reservoir__heading .summary-icon__image {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .water-gauge,
+  .page[data-page-content="inicio"] .water-gauge,
+  .page[data-page-content="monitoramento"] .water-gauge {
+    --size: min(38vw, 180px) !important;
+    margin: 12px auto 8px !important;
+  }
+
+  .water-gauge strong {
+    font-size: clamp(24px, 7vw, 34px) !important;
+  }
+
+  .reservoir__volume {
+    width: 100% !important;
+    font-size: 12px !important;
+    margin-top: 5px !important;
+  }
+
+  .reservoir__details {
+    width: 100% !important;
+    margin-top: 10px !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .reservoir__details li {
+    font-size: 10px !important;
+    gap: 6px;
+  }
+
+  .panel {
+    padding: 14px !important;
+  }
+
+  .panel h2 {
+    font-size: 15px;
+  }
+
+  .panel p {
+    font-size: 11px;
+  }
+
+  /* Tabelas viram cartões roláveis, sem estourar a tela */
+  .table-wrap,
+  .control-table-wrap,
+  .history-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+
+  .control-table,
+  .pump-table,
+  .history-table {
+    font-size: 11px;
+  }
+
+  /* Popovers como sheets compactos */
+  .header-popover,
+  .notification-panel,
+  .user-panel {
+    position: fixed !important;
+    top: calc(var(--mobile-header-h) + 8px) !important;
+    left: var(--mobile-side-pad) !important;
+    right: var(--mobile-side-pad) !important;
+    width: auto !important;
+    max-height: calc(100dvh - var(--mobile-header-h) - 24px);
+    overflow-y: auto;
+    border-radius: 18px;
+    padding: 16px !important;
+    box-shadow: 0 18px 42px rgba(18,56,95,.20);
+  }
+
+  .header-popover::before {
+    display: none;
+  }
+
+  .status-footer {
+    width: 100% !important;
+    padding: 10px var(--mobile-side-pad) 16px !important;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 620px) {
+  :root {
+    --mobile-header-h: 68px;
+    --mobile-side-pad: 10px;
+  }
+
+  .header__content {
+    min-height: var(--mobile-header-h);
+    grid-template-columns: 44px 1fr auto;
+    padding-inline: 10px;
+  }
+
+  .mobile-only#menuToggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand__logo {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .notification-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .header-bell-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .user-avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .user-avatar .icon {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  .app-main {
+    padding: 10px 10px 18px !important;
+  }
+
+  .summary-grid--five,
+  .summary-grid--four,
+  .summary-grid--three {
+    gap: 8px !important;
+  }
+
+  .summary-card {
+    min-height: 80px;
+    padding: 10px !important;
+  }
+
+  .summary-card small {
+    font-size: 10px;
+  }
+
+  .summary-card strong {
+    font-size: 17px;
+  }
+
+  .summary-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .reservoirs-panel,
+  .monitor-reservoirs,
+  .panel {
+    padding: 11px !important;
+  }
+
+  .reservoir-grid {
+    gap: 8px !important;
+  }
+
+  .water-gauge,
+  .page[data-page-content="inicio"] .water-gauge,
+  .page[data-page-content="monitoramento"] .water-gauge {
+    --size: min(39vw, 154px) !important;
+    border-width: 4px;
+  }
+
+  .reservoir__heading h2 {
+    font-size: 11.5px !important;
+  }
+
+  .reservoir__heading p {
+    font-size: 9px !important;
+  }
+
+  .reservoir__volume {
+    font-size: 11px !important;
+  }
+
+  .reservoir__details {
+    padding: 8px !important;
+  }
+
+  .reservoir__details li {
+    font-size: 9px !important;
+  }
+}
+
+/* =========================================================
+   MOBILE — CORES DO DRAWER CONFORME REFERÊNCIA
+   Fundo verde AquaFlow, botões brancos e item ativo azul.
+   ========================================================= */
+@media (max-width: 900px) {
+  .main-nav {
+    background: #85aa29 !important;
+    color: #fff !important;
+    border-top: 0 !important;
+    box-shadow: 16px 0 38px rgba(32, 62, 7, .22) !important;
+  }
+
+  .main-nav .nav__content {
+    position: relative;
+    padding: 20px 18px 72px !important;
+    gap: 12px !important;
+  }
+
+  .main-nav .nav__content::after {
+    content: "AquaFlow";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -.2px;
+  }
+
+  .main-nav .nav-item {
+    min-height: 52px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #4386d4 !important;
+    box-shadow: 0 1px 2px rgba(39, 77, 10, .08) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+  }
+
+  .main-nav .nav-item:hover {
+    background: #f7fbff !important;
+  }
+
+  .main-nav .nav-item.is-active {
+    color: #fff !important;
+    background: #4486d4 !important;
+    box-shadow: 0 7px 16px rgba(34, 89, 151, .24) !important;
+  }
+
+  .main-nav .nav-icon-image {
+    filter: brightness(0) saturate(100%) invert(50%) sepia(67%) saturate(1068%) hue-rotate(176deg) brightness(89%) contrast(88%) !important;
+  }
+
+  .main-nav .nav-item.is-active .nav-icon-image {
+    filter: none !important;
+  }
+
+  body.nav-open::after {
+    background: rgba(53, 62, 43, .24) !important;
+    backdrop-filter: blur(1.5px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE — FONTE E ÍCONES MAIORES NO DRAWER
+   ========================================================= */
+@media (max-width: 900px) {
+  .main-nav .nav-item {
+    min-height: 62px !important;
+    padding: 0 20px !important;
+    gap: 14px !important;
+    font-size: 17px !important;
+    font-weight: 800 !important;
+  }
+
+  .main-nav .nav-item__icon {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .main-nav .nav-icon-image {
+    width: 36px !important;
+    height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    object-fit: contain !important;
+  }
+}

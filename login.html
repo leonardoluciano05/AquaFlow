@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AquaFlow — Login</title>
+  <meta name="description" content="Acesso seguro ao painel AquaFlow."/>
+  <link rel="stylesheet" href="login.css"/>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <div class="auth-brand" aria-label="AquaFlow">
+        <img src="assets/logo-aquaflow-official.png" alt=""/>
+        <div class="auth-wordmark">Aqua<span>Flow</span></div>
+        <p>Gestão Inteligente de Reservatórios</p>
+      </div>
+
+      <div class="auth-copy">
+        <h1 id="authTitle">Acesse sua conta</h1>
+        <p>Entre para acompanhar reservatórios, bombas, alertas e histórico do sistema.</p>
+      </div>
+
+      <div class="auth-alert" id="authAlert" role="status" aria-live="polite" hidden></div>
+
+      <section class="auth-view is-active" data-auth-view="login">
+        <form class="auth-form" id="loginForm">
+          <label>
+            <span>E-mail ou usuário</span>
+            <input name="email" type="text" autocomplete="username" placeholder="admin ou nome@empresa.com" required/>
+          </label>
+          <label>
+            <span>Senha</span>
+            <div class="password-field">
+              <input name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required/>
+              <button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar ou ocultar senha">Mostrar</button>
+            </div>
+          </label>
+          <div class="auth-row auth-row--between">
+            <label class="check-row"><input type="checkbox" name="remember"/> <span>Lembrar de mim</span></label>
+            <button class="link-button" type="button" data-auth-open="forgot">Recuperar senha</button>
+          </div>
+          <button class="primary-button" type="submit">Entrar</button>
+          <p class="auth-demo-access">Acesso de demonstração: <strong>admin</strong> / <strong>admin</strong></p>
+        </form>
+
+        <div class="auth-divider"><span>ou</span></div>
+        <div id="googleButtonHost" class="google-host"></div>
+        <button class="google-fallback" id="googleFallback" type="button">
+          <span class="google-g">G</span>
+          Continuar com Google
+        </button>
+
+        <p class="auth-switch">Ainda não tem conta? <button class="link-button" type="button" data-auth-open="register">Criar conta</button></p>
+      </section>
+
+      <section class="auth-view" data-auth-view="register" hidden>
+        <div class="view-heading">
+          <button class="back-button" type="button" data-auth-open="login" aria-label="Voltar">←</button>
+          <div><h2>Criar conta</h2><p>Cadastre a empresa e valide seu e-mail.</p></div>
+        </div>
+        <form class="auth-form" id="registerForm">
+          <div class="form-grid">
+            <label><span>Nome</span><input name="name" autocomplete="name" required/></label>
+            <label><span>Empresa</span><input name="company" autocomplete="organization" required/></label>
+          </div>
+          <label><span>E-mail</span><input name="email" type="email" autocomplete="email" required/></label>
+          <label>
+            <span>Senha</span>
+            <div class="password-field"><input name="password" type="password" autocomplete="new-password" minlength="8" required/><button class="password-toggle" type="button" data-password-toggle>Mostrar</button></div>
+            <small>Mínimo de 8 caracteres.</small>
+          </label>
+          <button class="primary-button" type="submit">Criar conta</button>
+        </form>
+      </section>
+
+      <section class="auth-view" data-auth-view="verify" hidden>
+        <div class="view-heading">
+          <button class="back-button" type="button" data-auth-open="register" aria-label="Voltar">←</button>
+          <div><h2>Verifique seu e-mail</h2><p>Enviamos um código de 6 dígitos para <strong data-verify-email></strong>.</p></div>
+        </div>
+        <form class="auth-form" id="verifyForm">
+          <label><span>Código de verificação</span><input class="code-input" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="000000" required/></label>
+          <button class="primary-button" type="submit">Confirmar e entrar</button>
+        </form>
+        <button class="link-button centered" id="resendRegisterCode" type="button">Reenviar código</button>
+      </section>
+
+      <section class="auth-view" data-auth-view="forgot" hidden>
+        <div class="view-heading">
+          <button class="back-button" type="button" data-auth-open="login" aria-label="Voltar">←</button>
+          <div><h2>Recuperar senha</h2><p>Informe seu e-mail para receber um código temporário.</p></div>
+        </div>
+        <form class="auth-form" id="forgotForm">
+          <label><span>E-mail</span><input name="email" type="email" autocomplete="email" required/></label>
+          <button class="primary-button" type="submit">Enviar código</button>
+        </form>
+      </section>
+
+      <section class="auth-view" data-auth-view="reset" hidden>
+        <div class="view-heading">
+          <button class="back-button" type="button" data-auth-open="forgot" aria-label="Voltar">←</button>
+          <div><h2>Nova senha</h2><p>Digite o código enviado e escolha uma nova senha.</p></div>
+        </div>
+        <form class="auth-form" id="resetForm">
+          <label><span>Código</span><input class="code-input" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required/></label>
+          <label><span>Nova senha</span><div class="password-field"><input name="newPassword" type="password" minlength="8" required/><button class="password-toggle" type="button" data-password-toggle>Mostrar</button></div></label>
+          <button class="primary-button" type="submit">Atualizar senha</button>
+        </form>
+      </section>
+
+      <footer class="auth-footer">Acesso protegido • AquaFlow</footer>
+    </section>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>
