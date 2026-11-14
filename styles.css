@@ -4683,3 +4683,504 @@ body[data-page] .main-nav .nav-item > span:last-child {
     object-fit: contain !important;
   }
 }
+
+/* =========================================================
+   MOBILE RESPONSIVE FIX — 2026-11-14
+   Corrige conflitos entre regras mobile antigas/novas sem
+   alterar o layout desktop. Foco: iPhone / telas <= 620px.
+   ========================================================= */
+@media (max-width: 620px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-header,
+  .app-main,
+  .page,
+  .panel,
+  .summary-grid,
+  .summary-card,
+  .dashboard-grid,
+  .dashboard-side,
+  .monitor-grid,
+  .monitor-side,
+  .control-grid,
+  .control-main,
+  .control-side,
+  .alerts-grid,
+  .history-charts,
+  .history-bottom,
+  .reservoirs-panel,
+  .monitor-reservoirs {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .page {
+    overflow-x: clip;
+  }
+
+  /* Cards de resumo: continuam em 2 colunas, mas sem texto vazando. */
+  .summary-card {
+    overflow: hidden;
+    gap: 9px !important;
+  }
+
+  .summary-card > div {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .summary-card small,
+  .summary-card strong,
+  .summary-card p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .page[data-page-content="controle"] .summary-card,
+  .page[data-page-content="monitoramento"] .summary-card,
+  .page[data-page-content="alertas"] .summary-card,
+  .page[data-page-content="historico"] .summary-card {
+    padding: 10px !important;
+    min-height: 94px !important;
+    gap: 8px !important;
+  }
+
+  .page[data-page-content="controle"] .summary-card small,
+  .page[data-page-content="monitoramento"] .summary-card small,
+  .page[data-page-content="alertas"] .summary-card small,
+  .page[data-page-content="historico"] .summary-card small {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+
+  .page[data-page-content="controle"] .summary-card strong,
+  .page[data-page-content="monitoramento"] .summary-card strong,
+  .page[data-page-content="alertas"] .summary-card strong,
+  .page[data-page-content="historico"] .summary-card strong,
+  .page[data-page-content="alertas"] .summary-card strong.text-blue {
+    font-size: 20px !important;
+    line-height: 1.06 !important;
+  }
+
+  .page[data-page-content="controle"] .summary-card p,
+  .page[data-page-content="alertas"] .summary-card p,
+  .page[data-page-content="historico"] .summary-card p {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  .page[data-page-content="controle"] .summary-icon,
+  .page[data-page-content="monitoramento"] .summary-icon,
+  .page[data-page-content="alertas"] .summary-icon,
+  .page[data-page-content="historico"] .summary-icon {
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+  }
+
+  .page[data-page-content="controle"] .summary-icon__image,
+  .page[data-page-content="monitoramento"] .summary-icon__image,
+  .page[data-page-content="alertas"] .summary-icon__image,
+  .page[data-page-content="historico"] .summary-icon__image {
+    max-width: 30px !important;
+    max-height: 30px !important;
+  }
+
+  /* Reservatórios: no telefone ficam empilhados. A regra antiga de
+     duas colunas era a principal responsável pelo corte lateral. */
+  .page[data-page-content="inicio"] .reservoir-grid,
+  .page[data-page-content="monitoramento"] .reservoir-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 22px !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir,
+  .page[data-page-content="monitoramento"] .reservoir {
+    width: 100% !important;
+    max-width: 100% !important;
+    align-items: center !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__heading,
+  .page[data-page-content="monitoramento"] .reservoir__heading,
+  .page[data-page-content="inicio"] .reservoir__volume,
+  .page[data-page-content="monitoramento"] .reservoir__volume,
+  .page[data-page-content="inicio"] .reservoir__details,
+  .page[data-page-content="monitoramento"] .reservoir__details {
+    width: min(100%, 330px) !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__heading,
+  .page[data-page-content="monitoramento"] .reservoir__heading {
+    justify-content: flex-start !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__heading h2,
+  .page[data-page-content="monitoramento"] .reservoir__heading h2 {
+    font-size: 16px !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__heading p,
+  .page[data-page-content="monitoramento"] .reservoir__heading p {
+    font-size: 12px !important;
+  }
+
+  .water-gauge,
+  .page[data-page-content="inicio"] .water-gauge,
+  .page[data-page-content="monitoramento"] .water-gauge,
+  .page[data-page-content="monitoramento"] .water-gauge--compact {
+    --size: min(66vw, 245px) !important;
+    width: var(--size) !important;
+    height: var(--size) !important;
+    margin: 14px auto 10px !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__volume,
+  .page[data-page-content="monitoramento"] .reservoir__volume {
+    font-size: 17px !important;
+    text-align: center;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__details,
+  .page[data-page-content="monitoramento"] .reservoir__details {
+    padding: 12px !important;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__details div,
+  .page[data-page-content="monitoramento"] .reservoir__details div {
+    min-width: 0;
+  }
+
+  .page[data-page-content="inicio"] .reservoir__details dt,
+  .page[data-page-content="inicio"] .reservoir__details dd,
+  .page[data-page-content="monitoramento"] .reservoir__details dt,
+  .page[data-page-content="monitoramento"] .reservoir__details dd {
+    font-size: 12px !important;
+  }
+
+  /* Painéis laterais do dashboard. */
+  .dashboard-side,
+  .mini-panels {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .mini-panels {
+    grid-template-columns: 1fr !important;
+  }
+
+  .state-box,
+  .status-row,
+  .reading-list li {
+    min-width: 0;
+  }
+
+  /* Controle: tudo realmente fluido no telefone. */
+  .page[data-page-content="controle"] .control-grid,
+  .page[data-page-content="controle"] .control-main,
+  .page[data-page-content="controle"] .control-side,
+  .page[data-page-content="controle"] .system-control-layout,
+  .page[data-page-content="controle"] .mode-selector {
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .page[data-page-content="controle"] .system-control-panel,
+  .page[data-page-content="controle"] .pump-control-panel,
+  .page[data-page-content="controle"] .commands-panel,
+  .page[data-page-content="controle"] .messages-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page[data-page-content="controle"] .panel-title-row {
+    align-items: flex-start;
+  }
+
+  .page[data-page-content="controle"] .panel-title-row > div,
+  .page[data-page-content="controle"] .mode-card > div,
+  .page[data-page-content="controle"] .primary-action > span {
+    min-width: 0;
+  }
+
+  .page[data-page-content="controle"] .panel-title-row h2 {
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+  }
+
+  .page[data-page-content="controle"] .panel-title-row p {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .page[data-page-content="controle"] .mode-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    grid-template-columns: 40px minmax(0, 1fr) 18px !important;
+    padding: 14px !important;
+    gap: 11px !important;
+  }
+
+  .page[data-page-content="controle"] .mode-card strong {
+    font-size: 16px !important;
+  }
+
+  .page[data-page-content="controle"] .mode-card small {
+    font-size: 12px !important;
+    line-height: 1.42 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .page[data-page-content="controle"] .mode-card__icon.summary-icon--art {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .page[data-page-content="controle"] .system-actions {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .page[data-page-content="controle"] .primary-action {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 64px !important;
+    padding: 12px 14px !important;
+    gap: 11px !important;
+  }
+
+  .page[data-page-content="controle"] .primary-action strong {
+    font-size: 14px !important;
+  }
+
+  .page[data-page-content="controle"] .primary-action small {
+    font-size: 10.5px !important;
+  }
+
+  /* Gráficos de monitoramento/histórico: ocupam a largura disponível,
+     em vez de manter mínimos de 500/560/650px. */
+  .interactive-chart,
+  .history-interactive-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    padding-left: 26px !important;
+  }
+
+  .line-chart--interactive,
+  .line-chart--history-interactive {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+  }
+
+  .page[data-page-content="monitoramento"] .chart-panel__header,
+  .page[data-page-content="historico"] .chart-panel__header {
+    min-width: 0;
+  }
+
+  .chart-history-controls {
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+
+  .chart-range-label,
+  .page[data-page-content="monitoramento"] .chart-range-label {
+    min-width: 0 !important;
+    flex: 1 1 120px !important;
+    font-size: 11px !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-card {
+    min-width: 0 !important;
+    overflow: hidden;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-chart {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    grid-template-columns: 30px minmax(0, 1fr) !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-plot {
+    min-width: 0 !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-groups {
+    min-width: 0 !important;
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+    gap: 3px !important;
+    padding: 0 3px !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-bars {
+    gap: 1px !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-bar {
+    width: min(10px, 23%) !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-day time {
+    font-size: 7.5px !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-legend {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    justify-content: stretch !important;
+  }
+
+  .page[data-page-content="historico"] .pump-runtime-legend span {
+    min-width: 0;
+  }
+
+  /* Tabelas viram cartões no celular. Nada de coluna escondida fora da tela. */
+  .page[data-page-content="inicio"] .table-wrapper,
+  .page[data-page-content="controle"] .table-wrapper,
+  .page[data-page-content="historico"] .table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .page[data-page-content="inicio"] .pump-table,
+  .page[data-page-content="controle"] .control-table,
+  .page[data-page-content="historico"] .history-table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-collapse: separate !important;
+  }
+
+  .page[data-page-content="inicio"] .pump-table thead,
+  .page[data-page-content="controle"] .control-table thead,
+  .page[data-page-content="historico"] .history-table thead {
+    display: none !important;
+  }
+
+  .page[data-page-content="inicio"] .pump-table tbody,
+  .page[data-page-content="controle"] .control-table tbody,
+  .page[data-page-content="historico"] .history-table tbody {
+    display: grid !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .page[data-page-content="inicio"] .pump-table tr,
+  .page[data-page-content="controle"] .control-table tr,
+  .page[data-page-content="historico"] .history-table tr {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 6px 10px !important;
+    border: 1px solid #e3ecf4;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .page[data-page-content="inicio"] .pump-table td,
+  .page[data-page-content="controle"] .control-table td,
+  .page[data-page-content="historico"] .history-table td {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(92px, .72fr) minmax(0, 1.28fr) !important;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 2px !important;
+    border-bottom: 1px solid #edf2f6 !important;
+    text-align: right !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  .page[data-page-content="inicio"] .pump-table td:last-child,
+  .page[data-page-content="controle"] .control-table td:last-child,
+  .page[data-page-content="historico"] .history-table td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .page[data-page-content="inicio"] .pump-table td::before,
+  .page[data-page-content="controle"] .control-table td::before,
+  .page[data-page-content="historico"] .history-table td::before {
+    color: var(--text-500);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  .page[data-page-content="inicio"] .pump-table td:nth-child(1)::before { content: "Bomba"; }
+  .page[data-page-content="inicio"] .pump-table td:nth-child(2)::before { content: "Função"; }
+  .page[data-page-content="inicio"] .pump-table td:nth-child(3)::before { content: "Estado"; }
+  .page[data-page-content="inicio"] .pump-table td:nth-child(4)::before { content: "Controle"; }
+
+  .page[data-page-content="controle"] .control-table td:nth-child(1)::before { content: "Bomba"; }
+  .page[data-page-content="controle"] .control-table td:nth-child(2)::before { content: "Função / fluxo"; }
+  .page[data-page-content="controle"] .control-table td:nth-child(3)::before { content: "Estado"; }
+  .page[data-page-content="controle"] .control-table td:nth-child(4)::before { content: "Modo"; }
+  .page[data-page-content="controle"] .control-table td:nth-child(5)::before { content: "Ação"; }
+
+  .page[data-page-content="historico"] .history-table td:nth-child(1)::before { content: "Data e hora"; }
+  .page[data-page-content="historico"] .history-table td:nth-child(2)::before { content: "Reservatório 1"; }
+  .page[data-page-content="historico"] .history-table td:nth-child(3)::before { content: "Reservatório 2"; }
+  .page[data-page-content="historico"] .history-table td:nth-child(4)::before { content: "Evento"; }
+
+  /* Alertas: filtros e itens não ultrapassam o card. */
+  .page[data-page-content="alertas"] .alert-list-panel,
+  .page[data-page-content="alertas"] .alert-detail-panel,
+  .page[data-page-content="alertas"] .alert-list,
+  .page[data-page-content="alertas"] .alert-item,
+  .page[data-page-content="alertas"] .alert-item__copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page[data-page-content="alertas"] .alert-filters {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .page[data-page-content="alertas"] .alert-filters button {
+    width: 100%;
+    min-width: 0 !important;
+    padding-inline: 8px;
+  }
+
+  .page[data-page-content="alertas"] .alert-item {
+    grid-template-columns: 32px minmax(0, 1fr) !important;
+    align-items: start !important;
+  }
+
+  .page[data-page-content="alertas"] .alert-item__copy strong,
+  .page[data-page-content="alertas"] .alert-item__copy small {
+    overflow-wrap: anywhere;
+  }
+
+  /* Rodapé não cria largura extra. */
+  .status-footer,
+  body[data-page="alertas"] .status-footer {
+    max-width: 100% !important;
+    overflow: hidden;
+  }
+}
