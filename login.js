@@ -74,8 +74,8 @@
     setBusy(form, true);
     clearAlert();
 
-    // Acesso local de demonstração solicitado para o protótipo.
-    // Funciona inclusive quando o HTML é aberto diretamente, sem Node.js.
+    // Acesso de demonstração do protótipo.
+    // Funciona tanto localmente quanto na hospedagem, sem depender da sessão do servidor.
     if (identifier === 'admin' && password === 'admin') {
       localStorage.setItem('aquaflow_demo_session', JSON.stringify({
         authenticated: true,

@@ -414,8 +414,11 @@ async function main() {
   app.get('/login.css', (req, res) => res.sendFile(path.join(ROOT, 'login.css')));
   app.get('/login.js', (req, res) => res.sendFile(path.join(ROOT, 'login.js')));
 
+  // As páginas do painel são servidas normalmente e a validação de acesso
+  // acontece no auth-client.js. Isso permite o acesso de demonstração admin/admin
+  // via localStorage, enquanto contas reais continuam usando a sessão do backend.
   for (const page of ['index.html', 'monitoramento.html', 'controle.html', 'historico.html', 'alertas.html']) {
-    app.get(`/${page}`, requireAuth, (req, res) => res.sendFile(path.join(ROOT, page)));
+    app.get(`/${page}`, (req, res) => res.sendFile(path.join(ROOT, page)));
   }
 
   app.use('/assets', express.static(path.join(ROOT, 'assets'), { maxAge: IS_PROD ? '7d' : 0 }));
